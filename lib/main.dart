@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "./layout.dart";
 
 void main() => runApp(MyApp());
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
             appBar: AppBar(
               title: Text("字体样式"),
             ),
-            body: BaseBox()));
+            body: LayoutBox()));
   }
 }
 
