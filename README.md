@@ -11,7 +11,8 @@ TextEditingController是设置输入框的controller
 从第三个元素开始选中后面的文字  
 >controller.selection = TextSelection(baseOfft:2//偏移两个字符,ectenetOffset:controller.text.length)  
 使用FormField实现单选框/校验  
->FormField(
+```dart
+FormField(
     onSaved: (value){
         // userinfor.gender(value);
     },
@@ -57,3 +58,4 @@ TextEditingController是设置输入框的controller
         );
     },
 ),
+```
