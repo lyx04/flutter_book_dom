@@ -64,7 +64,7 @@ FormField(
     },
 ),
 ```
-*Flex  
+* Flex  
 >使用direction:Axis.vertical纵向的需要一个确定的高度 例如使用container作为父容器
-*Stack  
+* Stack  
 >需要在一个固定的容器里面
