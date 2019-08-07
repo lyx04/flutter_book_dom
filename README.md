@@ -68,3 +68,6 @@ FormField(
 >使用direction:Axis.vertical纵向的需要一个确定的高度 例如使用container作为父容器  
 * Stack  
 >需要在一个固定的容器里面
+* Tranform  
+>Tranform的变换在渲染阶段，所以占用空间的大小和位置是不变的，会产生文字重叠的情况  
+>使用RotateBox,RotateBox的变换在layout阶段，会影响大小和位置
