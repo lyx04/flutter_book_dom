@@ -5,6 +5,8 @@ flutter实战书
 maven { url 'https://maven.aliyun.com/repository/google' }  
 maven { url 'https://maven.aliyun.com/repository/jcenter' }  
 maven { url 'http://maven.aliyun.com/nexus/content/groups/public'}  
+## 进度条  
+进度条与圆形进度条的尺寸是由父元素控制的，可以使用sizedbox、ConstrainedBox控制大小
 ## Form
 TextEditingController是设置输入框的controller  
 TextEditingController _username = new TextEditingController();  

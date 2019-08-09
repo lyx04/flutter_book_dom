@@ -14,7 +14,8 @@ class _LayoutBoxState extends State<LayoutBox> {
         CoulmnsBox(),
         FlexBox(),
         WrapBox(),
-        StackBox()
+        StackBox(),
+        AlignBox()
       ],
     );
   }
@@ -182,5 +183,21 @@ class _StackBoxState extends State<StackBox> {
         ],
       ),
     );
+  }
+}
+
+class AlignBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.green[900],
+        child: Align(
+          widthFactor: 2, //通过子的大小计算父的大小  60*2=120
+          heightFactor: 2,
+          alignment: Alignment.center,
+          child: FlutterLogo(
+            size: 60,
+          ),
+        ));
   }
 }

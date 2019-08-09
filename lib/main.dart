@@ -1,16 +1,14 @@
 import "package:flutter/material.dart";
 import "./layout.dart";
 import "./container.dart";
+import "./scroll.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-           
-            body: ContainerBox()));
+    return MaterialApp(home: Scaffold(body: ScrollBox()));
   }
 }
 
@@ -29,7 +27,8 @@ class _BaseBoxState extends State<BaseBox> {
         ImageBox(),
         Checkedbox(),
         TextBox(),
-        FormBox()
+        FormBox(),
+        IndicatorBox()
       ],
     );
   }
@@ -413,5 +412,59 @@ class _FormBoxState extends State<FormBox> {
             )
           ],
         ));
+  }
+}
+
+class IndicatorBox extends StatefulWidget {
+  @override
+  _IndicatorBoxState createState() => _IndicatorBoxState();
+}
+
+class _IndicatorBoxState extends State<IndicatorBox> with SingleTickerProviderStateMixin{
+  AnimationController _animationController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _animationController = new AnimationController(vsync: this,duration: Duration(seconds: 3));
+    _animationController.forward();
+    _animationController.addListener(() => setState(() => {print(_animationController.value)}));
+    super.initState();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        LinearProgressIndicator(
+          // value:0,
+          backgroundColor: Colors.grey[200],
+          valueColor: AlwaysStoppedAnimation(Colors.blue),
+        ),
+        LinearProgressIndicator(
+          value:0.5,
+          backgroundColor: Colors.grey[200],
+          valueColor: AlwaysStoppedAnimation(Colors.blue),
+        ),
+        CircularProgressIndicator(
+          value: _animationController.value,
+          backgroundColor: Colors.green,
+           valueColor: ColorTween(begin: Colors.grey, end: Colors.blue).animate(_animationController)
+          // strokeWidth: 10,
+        ),
+        SizedBox(
+          width:100.0,
+          height:100.0,
+          child:CircularProgressIndicator(
+              value: _animationController.value,
+              valueColor: ColorTween(begin: Colors.grey, end: Colors.blue).animate(_animationController)
+          )
+        )
+      ],
+    );
   }
 }
