@@ -194,6 +194,7 @@ class _ScaffoldBoxState extends State<ScaffoldBox>
     "历史",
     "图片",
   ];
+  num colorActive = 0;
   @override
   void initState() {
     bodyList
@@ -203,102 +204,100 @@ class _ScaffoldBoxState extends State<ScaffoldBox>
       ))
       ..add(BodyContainer(title: "School"));
     tab =
-        new TabController(initialIndex: 1, length: tabList.length, vsync: this);
+        new TabController(initialIndex: 0, length: tabList.length, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-            child: MediaQuery.removePadding(
-               //移除抽屉菜单顶部默认留白
-              context: context,
-                removeTop: true,
-                removeBottom: true,
-                child: Column(
-                  children: <Widget>[
-                    DrawerHeader(
-                        child: Row(
-                      children: <Widget>[
-                        Image.network(
-                          "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3757916566,3108098082&fm=58&bpow=512&bpoh=512",
-                          width: 20.0,
-                          height: 20.0,
-                        ),
-                        Text("这是用户")
-                      ],
-                    )),
-                    ListView(
-                      shrinkWrap: true,
-                      children: <Widget>[
-                        ListTile(
-                            leading: Icon(Icons.add),
-                            title: Text("Add account")),
-                        ListTile(
-                            leading: Icon(Icons.settings),
-                            title: Text("Manage accounts"))
-                      ],
-                    )
-                  ],
-                ))),
-        appBar: AppBar(
-          title: Text("App Name"),
-          actions: <Widget>[
-            Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Icon(Icons.share))
-          ],
-          leading: Builder(
-            builder: (ctx) {
-              return IconButton(
-                icon: Icon(Icons.dashboard),
-                onPressed: () {
-                  Scaffold.of(ctx).openDrawer();
-                },
-              );
-            },
-          ),
-          bottom: TabBar(
-              controller: tab, tabs: tabList.map((e) => Tab(text: e)).toList()),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {},
-        ),
-        // body:bodyList[containerindex],//此处为底部导航栏所用
-        body: TabBarView(
-          controller: tab,
-          children: tabList.map((e) {
-            return Container(
-                child: Text(
-              e,
-              textScaleFactor: 5,
-            ));
-          }).toList(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) {
-            setState(() {
-              containerindex = index;
-            });
+      drawer: MyDrawer(),
+      appBar: AppBar(
+        title: Text("App Name"),
+        actions: <Widget>[
+          Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Icon(Icons.share))
+        ],
+        leading: Builder(
+          builder: (ctx) {
+            return IconButton(
+              icon: Icon(Icons.dashboard),
+              onPressed: () {
+                Scaffold.of(ctx).openDrawer();
+              },
+            );
           },
-          currentIndex: containerindex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text("HOME"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              title: Text("Business"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              title: Text("School"),
-            )
-          ],
-        ));
+        ),
+        bottom: TabBar(
+            controller: tab, tabs: tabList.map((e) => Tab(text: e)).toList()),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {},
+      ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, //显示页面悬浮按钮的位置
+      // body:bodyList[containerindex],//此处为底部导航栏所用
+      body: TabBarView(
+        controller: tab,
+        children: tabList.map((e) {
+          return Container(
+              child: Text(
+            e,
+            textScaleFactor: 5,
+          ));
+        }).toList(),
+      ),
+      bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          child: Row(
+            children: <Widget>[
+              IconButton(
+                color: colorActive == 0 ? Colors.black : Colors.grey,
+                onPressed: () {
+                  tab.animateTo(0);
+                  setState(() {
+                    colorActive = 0;
+                  });
+                },
+                icon: Icon(Icons.home),
+              ),
+              IconButton(
+                  color: colorActive == 2 ? Colors.black : Colors.grey,
+                  onPressed: () {
+                    tab.animateTo(2);
+                    setState(() {
+                      colorActive = 2;
+                    });
+                  },
+                  icon: Icon(Icons.business))
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          )),
+      // bottomNavigationBar: BottomNavigationBar(//使用bottomNavigationBar与floatingActionButtonLocation的按钮不能做成底部导航嵌套的样子，需要使用BottomAppBar
+      //   onTap: (index) {
+      //     setState(() {
+      //       containerindex = index;
+      //     });
+      //   },
+      //   currentIndex: containerindex,
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       title: Text("HOME"),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.business),
+      //       title: Text("Business"),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.school),
+      //       title: Text("School"),
+      //     )
+      //   ],
+      // )
+    );
   }
 }
 
@@ -308,5 +307,49 @@ class BodyContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(child: Text("$title"));
+  }
+}
+
+class MyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        child: MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+              padding: const EdgeInsets.only(left: 10.0, top: 38.0),
+              child: Row(
+                children: <Widget>[
+                  ClipOval(
+                      child: Image.network(
+                    "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3757916566,3108098082&fm=58&bpow=512&bpoh=512",
+                    width: 50,
+                  )),
+                  Container(
+                      margin: const EdgeInsets.only(left: 10.0),
+                      child: Text("用户名"))
+                ],
+              )),
+          Expanded(
+            child: ListView(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.add),
+                  title: Text("Add account"),
+                  onTap: () {},
+                ),
+                ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text("Manage account"))
+              ],
+            ),
+          )
+        ],
+      ),
+    ));
   }
 }

@@ -71,3 +71,6 @@ FormField(
 * Tranform  
 >Tranform的变换在渲染阶段，所以占用空间的大小和位置是不变的，会产生文字重叠的情况  
 >使用RotateBox,RotateBox的变换在layout阶段，会影响大小和位置
+* Scaffold/TabBar/底部导航
+>实现了简单的一个有TabBar、bottomAppBar、TabBarView、AppBar小页面  
+>[查找ScaffoldBox](https://github.com/lyx04/flutter_book_dom/blob/master/lib/container.dart)
