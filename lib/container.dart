@@ -4,22 +4,24 @@ import "dart:math" as math;
 class ContainerBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScaffoldBox();
-    // ListView(
-    //   children: <Widget>[
-    //     PaddingBox(),
-    //     ConstrainBox(),
-    //     SizeBox(),
-    //     TwoparentBox(),
-    //     DecoratBox(),
-    //     TransFormBox(),
-    //     Translate(),
-    //     Rotate(),
-    //     Scale(),
-    // ContaineBox()
-    //     RotateBox(),
-    //   ],
-    // );
+    return
+        // ScaffoldBox();
+        ListView(
+      children: <Widget>[
+        PaddingBox(),
+        ConstrainBox(),
+        SizeBox(),
+        TwoparentBox(),
+        DecoratBox(),
+        TransFormBox(),
+        Translate(),
+        Rotate(),
+        Scale(),
+        ContaineBox(),
+        RotateBox(),
+        ClipBox()
+      ],
+    );
   }
 }
 
@@ -350,6 +352,47 @@ class MyDrawer extends StatelessWidget {
           )
         ],
       ),
+    ));
+  }
+}
+
+
+class ClipBox extends StatelessWidget {
+  Widget avatar = Image.network(
+      "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3757916566,3108098082&fm=58&bpow=512&bpoh=512",
+      width: 80.0);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Column(
+      children: <Widget>[
+        ClipOval(child: avatar),
+        ClipRRect(child: avatar,borderRadius: BorderRadius.circular(10.0),),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topLeft,
+              widthFactor: .5,
+              child:avatar,
+            ),
+            Text("你好世界",style:TextStyle(color:Colors.green))
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ClipRect(
+              child: Align(
+                alignment: Alignment.topRight,
+                widthFactor: .5,
+                child: avatar,
+              ),
+            ),
+            Text("你好世界",textScaleFactor: 1.5,style:TextStyle(color:Colors.green),)
+          ],
+        )
+      ],
     ));
   }
 }

@@ -6,7 +6,12 @@ maven { url 'https://maven.aliyun.com/repository/google' }
 maven { url 'https://maven.aliyun.com/repository/jcenter' }  
 maven { url 'http://maven.aliyun.com/nexus/content/groups/public'}  
 ## Form
-TextEditingController是设置输入框的controller
+TextEditingController是设置输入框的controller  
+TextEditingController _username = new TextEditingController();  
+FocusNode是设置TextField的focusnode是控制对输入框的功能进行操作，失去焦点  
+FocusNode _usernamenode = new FocusNode();  
+获取焦点  
+FocusScope.of(context).requestFocus(_passwordnode);
 * 输入框可以通过单类中的
 ```dart
     onchang(v){print(v)}/initstate中的controller.addListener((){print(controll.text)})  
