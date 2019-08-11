@@ -15,7 +15,7 @@ class _ScrollBoxState extends State<ScrollBox> {
             physics: ClampingScrollPhysics(), //滑动到边界的样式
             child: Center(
                 child: Column(
-              children: <Widget>[SingleBox(),ListViewBox()],
+              children: <Widget>[SingleBox(),ListViewBox(),ListBuildBox(),ListSeparatedBox(),ListSeparatedBox()],
             ))));
   }
 }
@@ -63,6 +63,46 @@ class _ListViewBoxState extends State<ListViewBox> {
         const Text('And I thought I was so smart'),
         const Text('And I thought I was so smart'),
       ],
+    );
+  }
+}
+class ListBuildBox extends StatefulWidget {
+  @override
+  _ListBuildBoxState createState() => _ListBuildBoxState();
+}
+
+class _ListBuildBoxState extends State<ListBuildBox> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap:true,
+      itemCount: 100,
+      itemBuilder: (BuildContext context,int itemnum){
+        return ListTile(title: Text("$itemnum"),);
+      },
+    );
+  }
+}
+
+class ListSeparatedBox extends StatefulWidget {
+  @override
+  _ListSeparatedBoxState createState() => _ListSeparatedBoxState();
+}
+
+class _ListSeparatedBoxState extends State<ListSeparatedBox> {
+  @override
+  Widget build(BuildContext context) {
+    Widget divider1 = Divider(color:Colors.blue);//下划线组件
+    Widget divider2 = Divider(color:Colors.green);
+    return ListView.separated(
+      shrinkWrap:true,
+      itemCount: 100,
+      separatorBuilder: (BuildContext context,int index){
+        return index%2==0?divider1:divider2;
+      },
+      itemBuilder: (BuildContext context,int itemnum){
+        return ListTile(title: Text("$itemnum"),);
+      },
     );
   }
 }

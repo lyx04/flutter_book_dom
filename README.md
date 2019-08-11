@@ -81,3 +81,5 @@ FormField(
 * Scaffold/TabBar/底部导航
 >实现了简单的一个有TabBar、bottomAppBar、TabBarView、AppBar小页面  
 >[查找ScaffoldBox](https://github.com/lyx04/flutter_book_dom/blob/master/lib/container.dart)
+* 下划线组件  
+>Divider();
