@@ -8,15 +8,18 @@ class ScrollBox extends StatefulWidget {
 class _ScrollBoxState extends State<ScrollBox> {
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-        child: SingleChildScrollView(
-            // scrollDirection: Axis.,
-            // physics:BouncingScrollPhysics() ,
-            physics: ClampingScrollPhysics(), //滑动到边界的样式
-            child: Center(
-                child: Column(
-              children: <Widget>[SingleBox(),ListViewBox(),ListBuildBox(),ListSeparatedBox(),ListSeparatedBox()],
-            ))));
+    return  
+    GridCountBox();
+    // Scrollbar(
+    //     child: SingleChildScrollView(
+    //         // scrollDirection: Axis.,
+    //         // physics:BouncingScrollPhysics() ,
+    //         physics: ClampingScrollPhysics(), //滑动到边界的样式
+    //         child: Center(
+    //             child: Column(
+    //           children: <Widget>[
+    //             SingleBox(),ListViewBox(),ListBuildBox(),ListSeparatedBox(),ListSeparatedBox(),GridBox();],
+    //         ))));
   }
 }
 
@@ -103,6 +106,54 @@ class _ListSeparatedBoxState extends State<ListSeparatedBox> {
       itemBuilder: (BuildContext context,int itemnum){
         return ListTile(title: Text("$itemnum"),);
       },
+    );
+  }
+}
+
+class GridBox extends StatefulWidget {
+  @override
+  _GridBoxState createState() => _GridBoxState();
+}
+
+class _GridBoxState extends State<GridBox> {
+  @override
+  Widget build(BuildContext context) {
+    return GridView(
+      //SliverGridDelegateWithFixedCrossAxisCount   SliverGridDelegateWithMaxCrossAxisExtent
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent:120,
+        childAspectRatio: 1.0
+      ),
+      children: <Widget>[
+        Icon(Icons.ac_unit),
+    Icon(Icons.airport_shuttle),
+    Icon(Icons.all_inclusive),
+    Icon(Icons.beach_access),
+    Icon(Icons.cake),
+    Icon(Icons.free_breakfast)
+      ],
+    );
+  }
+}
+class GridCountBox extends StatefulWidget {
+  @override
+  _GridCountBoxState createState() => _GridCountBoxState();
+}
+
+class _GridCountBoxState extends State<GridCountBox> {
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count( //==SliverGridDelegateWithFixedCrossAxisCount
+      crossAxisCount: 5,
+      childAspectRatio: 1.0,
+      children: <Widget>[
+         Icon(Icons.ac_unit),
+    Icon(Icons.airport_shuttle),
+    Icon(Icons.all_inclusive),
+    Icon(Icons.beach_access),
+    Icon(Icons.cake),
+    Icon(Icons.free_breakfast)
+      ],
     );
   }
 }
