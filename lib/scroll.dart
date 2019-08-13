@@ -9,7 +9,8 @@ class ScrollBox extends StatefulWidget {
 class _ScrollBoxState extends State<ScrollBox> {
   @override
   Widget build(BuildContext context) {
-    return     CustomScrollViewTextRoute();
+    return    ListViewBox ();
+    
     // Scrollbar(
     //     child: SingleChildScrollView(
     //         // scrollDirection: Axis.,
@@ -18,7 +19,7 @@ class _ScrollBoxState extends State<ScrollBox> {
     //         child: Center(
     //             child: Column(
     //           children: <Widget>[
-    //            GridBuilder(), GridExtent(),SingleBox(),ListViewBox(),ListBuildBox(),ListSeparatedBox(),ListSeparatedBox(),GridBox(),PositionTitle();GridCountBox();],
+    //            CustomScrollViewTextRoute(),GridBuilder(), GridExtent(),SingleBox(),ListViewBox(),ListBuildBox(),ListSeparatedBox(),ListSeparatedBox(),GridBox(),PositionTitle();GridCountBox();],
     //         ))));
   }
 }
@@ -52,20 +53,34 @@ class ListViewBox extends StatefulWidget {
 }
 
 class _ListViewBoxState extends State<ListViewBox> {
+  ScrollController _scrollController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _scrollController = new ScrollController();
+    _scrollController.addListener((){
+      print(_scrollController.offset);
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      // itemExtent: 100.0,
-      shrinkWrap: true,
-      children: <Widget>[
-        const Text('I\'m dedicating every day to you'),
-        const Text('Domestic life was never quite my style'),
-        const Text('When you smile, you knock me out, I fall apart'),
-        const Text('And I thought I was so smart'),
-        const Text('And I thought I was so smart'),
-        const Text('And I thought I was so smart'),
-        const Text('And I thought I was so smart'),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title:GestureDetector(
+          child:Text("双击回到头部"),
+          onTap: (){
+            _scrollController.animateTo(0,duration: Duration(milliseconds: 2),curve: Curves.ease);
+          },
+        )
+      ),
+      body:ListView.builder(
+        controller: _scrollController,
+        itemCount: 30,
+        itemBuilder: (BuildContext context,int itemnum){
+          return ListTile(title: Text("$itemnum"),);
+        },
+      )
     );
   }
 }
