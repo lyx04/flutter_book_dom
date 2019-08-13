@@ -9,7 +9,7 @@ class ScrollBox extends StatefulWidget {
 class _ScrollBoxState extends State<ScrollBox> {
   @override
   Widget build(BuildContext context) {
-    return GridCountBox();
+    return     CustomScrollViewTextRoute();
     // Scrollbar(
     //     child: SingleChildScrollView(
     //         // scrollDirection: Axis.,
@@ -18,7 +18,7 @@ class _ScrollBoxState extends State<ScrollBox> {
     //         child: Center(
     //             child: Column(
     //           children: <Widget>[
-    //             SingleBox(),ListViewBox(),ListBuildBox(),ListSeparatedBox(),ListSeparatedBox(),GridBox(),PositionTitle();],
+    //            GridBuilder(), GridExtent(),SingleBox(),ListViewBox(),ListBuildBox(),ListSeparatedBox(),ListSeparatedBox(),GridBox(),PositionTitle();GridCountBox();],
     //         ))));
   }
 }
@@ -200,9 +200,9 @@ class _GridBoxState extends State<GridBox> {
   @override
   Widget build(BuildContext context) {
     return GridView(
-      //SliverGridDelegateWithFixedCrossAxisCount   SliverGridDelegateWithMaxCrossAxisExtent
+      //SliverGridDelegateWithFixedCrossAxisCount(横轴为固定数量)   SliverGridDelegateWithMaxCrossAxisExtent(横轴的元素为固定的长度)
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 120, childAspectRatio: 1.0),
+          maxCrossAxisExtent: 200, childAspectRatio: 6.0),
       children: <Widget>[
         Icon(Icons.ac_unit),
         Icon(Icons.airport_shuttle),
@@ -235,6 +235,129 @@ class _GridCountBoxState extends State<GridCountBox> {
         Icon(Icons.cake),
         Icon(Icons.free_breakfast)
       ],
+    );
+  }
+}
+
+class GridExtent extends StatefulWidget {
+  @override
+  _GridExtentState createState() => _GridExtentState();
+}
+
+class _GridExtentState extends State<GridExtent> {
+  @override
+  Widget build(BuildContext context) {
+    return GridView.extent(
+      maxCrossAxisExtent: 150,
+      children: <Widget>[
+        Icon(Icons.ac_unit),
+        Icon(Icons.airport_shuttle),
+        Icon(Icons.all_inclusive),
+        Icon(Icons.beach_access),
+        Icon(Icons.cake),
+        Icon(Icons.free_breakfast)
+      ],
+    );
+  }
+}
+
+class GridBuilder extends StatefulWidget {
+  @override
+  _GridBuilderState createState() => _GridBuilderState();
+}
+
+class _GridBuilderState extends State<GridBuilder> {
+  List<IconData> _icons = [];
+  @override
+  void initState() {
+    _retrieveIcons();
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.0
+      ) ,
+      itemBuilder: (BuildContext context,int itemnum){
+        if(itemnum == _icons.length-1&&_icons.length<20){
+          _retrieveIcons();
+        }
+        return Icon(_icons[itemnum]);
+      },
+      itemCount: _icons.length,
+    );
+  }
+
+  void _retrieveIcons() {
+    Future.delayed(Duration(seconds: 2)).then((e) {
+      setState(() {
+        _icons.addAll([
+          Icons.ac_unit,
+          Icons.airport_shuttle,
+          Icons.all_inclusive,
+          Icons.beach_access,
+          Icons.cake,
+          Icons.free_breakfast
+        ]);
+      });
+    });
+  }
+}
+
+
+class CustomScrollViewTextRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child:CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned:true,
+            expandedHeight: 250.0,
+            flexibleSpace: FlexibleSpaceBar(
+              title:Text("demo"),
+              background: Icon(Icons.add),
+
+            ),
+          ),
+          SliverPadding(
+            padding:const EdgeInsets.all(8.0),
+            sliver:SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 10,
+              ),
+              delegate:SliverChildBuilderDelegate(
+                (BuildContext context,int index){
+                  return Container(
+                    alignment: Alignment.bottomCenter,
+                    color:Colors.cyan[100*(index%9)],
+                    child:Text("$index"),
+                  );
+                },
+                childCount: 50,
+              ) ,
+              
+            )
+          ),
+          SliverFixedExtentList(
+            itemExtent: 50.0,
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context,int index){
+                return Container(
+                  alignment:Alignment.bottomCenter,
+                  color:Colors.lightBlue[100 * (index % 9)],
+                  child:Text("$index")
+                );
+              },
+              childCount: 50,
+            )
+          )
+        ],
+      )
     );
   }
 }
