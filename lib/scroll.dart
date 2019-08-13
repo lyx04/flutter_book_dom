@@ -64,13 +64,21 @@ class _ListViewBoxState extends State<ListViewBox> {
     super.initState();
   }
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle:true,
         title:GestureDetector(
           child:Text("双击回到头部"),
-          onTap: (){
-            _scrollController.animateTo(0,duration: Duration(milliseconds: 2),curve: Curves.ease);
+          onDoubleTap: (){
+            print(1);
+            _scrollController.animateTo(0,duration: Duration(milliseconds: 200),curve: Curves.ease);
           },
         )
       ),
