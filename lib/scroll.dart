@@ -9,8 +9,8 @@ class ScrollBox extends StatefulWidget {
 class _ScrollBoxState extends State<ScrollBox> {
   @override
   Widget build(BuildContext context) {
-    return    ListViewBox ();
-    
+    return ListViewBox();
+
     // Scrollbar(
     //     child: SingleChildScrollView(
     //         // scrollDirection: Axis.,
@@ -54,42 +54,62 @@ class ListViewBox extends StatefulWidget {
 
 class _ListViewBoxState extends State<ListViewBox> {
   ScrollController _scrollController;
+  String az = "abcdefghijklmnopqrstuvwxyz";
+  double linear = 0;
   @override
   void initState() {
     // TODO: implement initState
     _scrollController = new ScrollController();
-    _scrollController.addListener((){
-      print(_scrollController.offset);
+    _scrollController.addListener(() {
+      // print(_scrollController.);
     });
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle:true,
-        title:GestureDetector(
-          child:Text("双击回到头部"),
-          onDoubleTap: (){
-            print(1);
-            _scrollController.animateTo(0,duration: Duration(milliseconds: 200),curve: Curves.ease);
-          },
-        )
-      ),
-      body:ListView.builder(
-        controller: _scrollController,
-        itemCount: 30,
-        itemBuilder: (BuildContext context,int itemnum){
-          return ListTile(title: Text("$itemnum"),);
-        },
-      )
-    );
+        appBar: AppBar(
+          centerTitle: true,
+          title: GestureDetector(
+            child: Text("双击回到头部"),
+            onDoubleTap: () {
+              _scrollController.animateTo(0,
+                  duration: Duration(milliseconds: 2000), curve: Curves.ease);
+            },
+          ),
+        ),
+        body: Scrollbar(
+          child: NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification offset) {
+                setState(() {
+                  linear =
+                      offset.metrics.pixels / offset.metrics.maxScrollExtent;
+                });
+              },
+              child: Stack(
+                children: <Widget>[
+                  LinearProgressIndicator(
+                    value: linear,
+                    backgroundColor: Colors.white10,
+                  ),
+                  ListView(
+                    itemExtent: 50.0,
+                    children: az
+                        .split("")
+                        .map((e) => ListTile(title: Text(e)))
+                        .toList(),
+                  )
+                ],
+              )),
+        ));
   }
 }
 
@@ -297,15 +317,14 @@ class _GridBuilderState extends State<GridBuilder> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.0
-      ) ,
-      itemBuilder: (BuildContext context,int itemnum){
-        if(itemnum == _icons.length-1&&_icons.length<20){
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, childAspectRatio: 1.0),
+      itemBuilder: (BuildContext context, int itemnum) {
+        if (itemnum == _icons.length - 1 && _icons.length < 20) {
           _retrieveIcons();
         }
         return Icon(_icons[itemnum]);
@@ -330,57 +349,50 @@ class _GridBuilderState extends State<GridBuilder> {
   }
 }
 
-
 class CustomScrollViewTextRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child:CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned:true,
-            expandedHeight: 250.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title:Text("demo"),
-              background: Icon(Icons.add),
-
-            ),
+        child: CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: true,
+          expandedHeight: 250.0,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text("demo"),
+            background: Icon(Icons.add),
           ),
-          SliverPadding(
-            padding:const EdgeInsets.all(8.0),
-            sliver:SliverGrid(
+        ),
+        SliverPadding(
+            padding: const EdgeInsets.all(8.0),
+            sliver: SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 10,
               ),
-              delegate:SliverChildBuilderDelegate(
-                (BuildContext context,int index){
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
                   return Container(
                     alignment: Alignment.bottomCenter,
-                    color:Colors.cyan[100*(index%9)],
-                    child:Text("$index"),
+                    color: Colors.cyan[100 * (index % 9)],
+                    child: Text("$index"),
                   );
                 },
                 childCount: 50,
-              ) ,
-              
-            )
-          ),
-          SliverFixedExtentList(
+              ),
+            )),
+        SliverFixedExtentList(
             itemExtent: 50.0,
             delegate: SliverChildBuilderDelegate(
-              (BuildContext context,int index){
+              (BuildContext context, int index) {
                 return Container(
-                  alignment:Alignment.bottomCenter,
-                  color:Colors.lightBlue[100 * (index % 9)],
-                  child:Text("$index")
-                );
+                    alignment: Alignment.bottomCenter,
+                    color: Colors.lightBlue[100 * (index % 9)],
+                    child: Text("$index"));
               },
               childCount: 50,
-            )
-          )
-        ],
-      )
-    );
+            ))
+      ],
+    ));
   }
 }
