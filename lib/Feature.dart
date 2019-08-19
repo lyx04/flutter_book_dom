@@ -7,7 +7,8 @@ class FeatureBox extends StatelessWidget {
       child:ListView(
         shrinkWrap: true,
         children: <Widget>[
-WillPopBox()
+WillPopBox(),
+InheritedWidgetTestRoute()
         ],
       )
     );
@@ -50,6 +51,72 @@ class _WillPopBoxState extends State<WillPopBox> {
           child:Text("点击")
         )
       ),
+    );
+  }
+}
+
+class ShareDataWidget extends InheritedWidget{
+  ShareDataWidget({
+    @required this.data,
+    Widget child
+  }):super(child:child);
+  final int data;
+  static ShareDataWidget of(BuildContext context){
+    return context.inheritFromWidgetOfExactType(ShareDataWidget);
+  }
+  @override
+  bool updateShouldNotify(ShareDataWidget old){
+    return old.data !=data;
+  }
+}
+
+class _TextWidget extends StatefulWidget {
+  @override
+  __TextWidgetState createState() => __TextWidgetState();
+}
+
+class __TextWidgetState extends State<_TextWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Text(ShareDataWidget.of(context).data.toString());
+  }
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print("它会在“依赖”发生变化时被Flutter Framework调用");
+  }
+}
+class InheritedWidgetTestRoute extends StatefulWidget {
+  @override
+  _InheritedWidgetTestRouteState createState() => _InheritedWidgetTestRouteState();
+}
+
+class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
+  int count = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child:ShareDataWidget(
+        data:count,
+        child:Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding:const EdgeInsets.all(10.0),
+              child:_TextWidget()
+            ),
+            RaisedButton(
+              child:Text("点击加以"),
+              onPressed: (){
+                setState(() {
+                 count++; 
+                });
+              },
+            )
+          ],
+        )
+      )
     );
   }
 }
