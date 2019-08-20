@@ -20,11 +20,11 @@ class WillPopBox extends StatefulWidget {
 }
 
 class _WillPopBoxState extends State<WillPopBox> {
+  DateTime _lastPressedAt;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        
         // Future<bool>异步并返回布尔型可以使用Future.delayed/使用async await
         Future.delayed(Duration(milliseconds: 2000)).then((e)=>true);
       },
@@ -39,7 +39,11 @@ class _WillPopBoxState extends State<WillPopBox> {
                   ),
                   body:WillPopScope(
                     onWillPop: ()async{
-                      return false;
+                      if(_lastPressedAt == null|| DateTime.now().difference(_lastPressedAt)>Duration(seconds: 1)){
+                        _lastPressedAt = DateTime.now();
+                        return false;
+                      }
+                      return true;
                     },
                     child:Text("123")
                   )
@@ -53,3 +57,4 @@ class _WillPopBoxState extends State<WillPopBox> {
     );
   }
 }
+
