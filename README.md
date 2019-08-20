@@ -87,3 +87,5 @@ FormField(
 >[监控滚动距离](https://github.com/lyx04/flutter_book_dom/blob/master/lib/scroll.dart)中的ListViewBox组件  
 >每个滚动组件之前都要加Scrollbar增加滚动条  
 >父组件写成NotificationListener可以实时监控到滚动的距离、总体列表的距离,**比ListView中的Controller获取到的信息要多**
+* 数据共享
+>
