@@ -59,8 +59,6 @@ class _WillPopBoxState extends State<WillPopBox> {
   }
 }
 
-<<<<<<< HEAD
-=======
 class ShareDataWidget extends InheritedWidget{
   ShareDataWidget({
     @required this.data,
@@ -126,4 +124,3 @@ class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
     );
   }
 }
->>>>>>> 9fe372ae2bd5df1dd918c146ff298fd341cb131a
