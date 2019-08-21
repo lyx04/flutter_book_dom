@@ -96,4 +96,7 @@ FormField(
 >reassemble:为开发调试而提供  
 >didUpdateWidget:widget重构时,flutter framework会调用widget.canUpdate(true-调用,false-不调用)检测同一位置的节点  
 >deactivate:当state对象从树中被移除时  
->dispose:在deactivate后没有重新插入树中就会被调用
+>dispose:在deactivate后没有重新插入树中就会被调用  
+* 获取state对象的方法  
+>Scaffold.of(context)  
+>static GlobalKay<XXXState> _globalkey = GlobalKey()**将组件的key:_globalkey** 获取state对象的方法:_globalkey.currentState/获取widget对象:_globalkey.currentWidget
