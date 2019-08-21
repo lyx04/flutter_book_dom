@@ -88,6 +88,11 @@ FormField(
 >每个滚动组件之前都要加Scrollbar增加滚动条  
 >父组件写成NotificationListener可以实时监控到滚动的距离、总体列表的距离,**比ListView中的Controller获取到的信息要多**
 * widget生命周期  
->initStat>didChangeDependencies>build>(热重载后)reassemble>didupdateWidget>build  
->initState当widget第一次插入到widget树时会被调用  
->didChangeDependencies当state对象的依赖发生变化时被调用
+>initState > didChangeDependencies > build > (热重载后)reassemble > didupdateWidget > build > (移除节点之后)reassemble > deactive > dispose
+>initState:当widget第一次插入到widget树时会被调用  
+>didChangeDependencies:当state对象的依赖发生变化时被调用  
+>build:构建widget树 会在**initState/didUpdateWidget/setState/didChangeDependencies之后**被调用  
+>reassemble:为开发调试而提供  
+>didUpdateWidget:widget重构时,flutter framework会调用widget.canUpdate(true-调用,false-不调用)检测同一位置的节点  
+>deactivate:当state对象从树中被移除时  
+>dispose:在deactivate后没有重新插入树中就会被调用
