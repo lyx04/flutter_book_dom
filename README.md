@@ -88,7 +88,7 @@ FormField(
 >每个滚动组件之前都要加Scrollbar增加滚动条  
 >父组件写成NotificationListener可以实时监控到滚动的距离、总体列表的距离,**比ListView中的Controller获取到的信息要多**
 * widget生命周期  
->initState > didChangeDependencies > build > (热重载后)reassemble > didupdateWidget > build > (移除节点之后)reassemble > deactive > dispose
+>initState > didChangeDependencies > build > (热重载后)reassemble > didupdateWidget > build > (移除节点之后)reassemble > deactive > dispose  
 >initState:当widget第一次插入到widget树时会被调用  
 >didChangeDependencies:当state对象的依赖发生变化时被调用  
 >build:构建widget树 会在**initState/didUpdateWidget/setState/didChangeDependencies之后**被调用  
