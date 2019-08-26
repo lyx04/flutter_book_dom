@@ -100,3 +100,7 @@ FormField(
 * 获取state对象的方法  
 >Scaffold.of(context)  
 >static GlobalKay<XXXState> _globalkey = GlobalKey()**将组件的key:_globalkey** 获取state对象的方法:_globalkey.currentState/获取widget对象:_globalkey.currentWidget
+* InheritedWidget
+>InheritedWidget中of方法中context的方法  
+>1. context.inheritFromWidgetOfExactType(ShareDataWidget);调用的时候会触发子组件的didChangeDependencies的方法    
+>2. context.ancestorInheritedElementForWidgetOfExactType(Widget).widget;不会触发子组件的didChangeDependencies的方法  
