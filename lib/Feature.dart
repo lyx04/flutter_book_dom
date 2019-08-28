@@ -8,7 +8,11 @@ class FeatureBox extends StatelessWidget {
       shrinkWrap: true,
       children: <Widget>[
         WillPopBox(),
-        InheritedWidgetTestRoute()
+        InheritedWidgetTestRoute(),
+        NavBar(
+          color: Colors.blue,
+          title: "标题",
+        ),
       ],
     ));
   }
@@ -53,19 +57,19 @@ class _WillPopBoxState extends State<WillPopBox> {
   }
 }
 
-
-
 class ShareDataWidget extends InheritedWidget {
-  ShareDataWidget({@required this.data,Widget child}):super(child:child);
+  ShareDataWidget({@required this.data, Widget child}) : super(child: child);
   final int data;
-  static ShareDataWidget of(BuildContext context){
-      // return context.inheritFromWidgetOfExactType(ShareDataWidget);
-      return context.ancestorInheritedElementForWidgetOfExactType(ShareDataWidget).widget;
+  static ShareDataWidget of(BuildContext context) {
+    // return context.inheritFromWidgetOfExactType(ShareDataWidget);
+    return context
+        .ancestorInheritedElementForWidgetOfExactType(ShareDataWidget)
+        .widget;
   }
 
   @override
-  bool updateShouldNotify(ShareDataWidget old){
-    return old.data!=data;
+  bool updateShouldNotify(ShareDataWidget old) {
+    return old.data != data;
   }
 }
 
@@ -79,6 +83,7 @@ class _TestWidgetState extends State<TestWidget> {
   Widget build(BuildContext context) {
     return Text(ShareDataWidget.of(context).data.toString());
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -90,7 +95,8 @@ class _TestWidgetState extends State<TestWidget> {
 
 class InheritedWidgetTestRoute extends StatefulWidget {
   @override
-  _InheritedWidgetTestRouteState createState() => _InheritedWidgetTestRouteState();
+  _InheritedWidgetTestRouteState createState() =>
+      _InheritedWidgetTestRouteState();
 }
 
 class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
@@ -104,9 +110,9 @@ class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
           TestWidget(),
           RaisedButton(
             child: Text("添加一个"),
-            onPressed: (){
+            onPressed: () {
               setState(() {
-               count++; 
+                count++;
               });
             },
           )
@@ -116,3 +122,75 @@ class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
   }
 }
 
+class NavBar extends StatelessWidget {
+  final String title;
+  final Color color;
+  NavBar({Key key, this.color, this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(minHeight: 52, minWidth: double.infinity),
+      decoration: BoxDecoration(color: this.color, boxShadow: [
+        BoxShadow(color: Colors.black26, offset: Offset(0, 3), blurRadius: 3)
+      ]),
+      child: Text(
+        "${title},${color.computeLuminance()}",
+        style: TextStyle(
+            color:
+                color.computeLuminance() < 0.5 ? Colors.white : Colors.black),
+      ),
+      alignment: Alignment.center,
+    );
+  }
+}
+
+class ThemeTestRoute extends StatefulWidget {
+  @override
+  _ThemeTestRouteState createState() => _ThemeTestRouteState();
+}
+
+class _ThemeTestRouteState extends State<ThemeTestRoute> {
+  Color _themeColor = Colors.teal;
+  @override
+  Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+    return Theme(
+        data: ThemeData(
+            primarySwatch: _themeColor,
+            iconTheme: IconThemeData(color: _themeColor)),
+        child: Scaffold(
+            appBar: AppBar(title: Text("主题测试")),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.favorite),
+                    Icon(Icons.airline_seat_flat),
+                    Text("颜色跟随主题")
+                  ],
+                ),
+                Theme(
+                    data: themeData.copyWith(
+                        iconTheme:
+                            themeData.iconTheme.copyWith(color: Colors.black)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.favorite),
+                        Icon(Icons.airline_seat_flat),
+                        Text("颜色固定")
+                      ],
+                    ))
+              ],
+            ),floatingActionButton: FloatingActionButton(
+              onPressed: (){
+                setState(() {
+                 _themeColor = _themeColor==Colors.teal?Colors.blue:Colors.teal;
+                });
+              },
+              child:Icon(Icons.palette)
+            ),));
+  }
+}
