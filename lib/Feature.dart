@@ -1,3 +1,6 @@
+import 'dart:collection';
+import 'dart:io';
+
 import "package:flutter/material.dart";
 
 class FeatureBox extends StatelessWidget {
@@ -8,7 +11,11 @@ class FeatureBox extends StatelessWidget {
       shrinkWrap: true,
       children: <Widget>[
         WillPopBox(),
-        InheritedWidgetTestRoute()
+        InheritedWidgetTestRoute(),
+        Shop(),
+        NavBar(
+          color: Colors.blue,
+        )
       ],
     ));
   }
@@ -53,19 +60,19 @@ class _WillPopBoxState extends State<WillPopBox> {
   }
 }
 
-
-
 class ShareDataWidget extends InheritedWidget {
-  ShareDataWidget({@required this.data,Widget child}):super(child:child);
+  ShareDataWidget({@required this.data, Widget child}) : super(child: child);
   final int data;
-  static ShareDataWidget of(BuildContext context){
-      // return context.inheritFromWidgetOfExactType(ShareDataWidget);
-      return context.ancestorInheritedElementForWidgetOfExactType(ShareDataWidget).widget;
+  static ShareDataWidget of(BuildContext context) {
+    // return context.inheritFromWidgetOfExactType(ShareDataWidget);
+    return context
+        .ancestorInheritedElementForWidgetOfExactType(ShareDataWidget)
+        .widget;
   }
 
   @override
-  bool updateShouldNotify(ShareDataWidget old){
-    return old.data!=data;
+  bool updateShouldNotify(ShareDataWidget old) {
+    return old.data != data;
   }
 }
 
@@ -79,6 +86,7 @@ class _TestWidgetState extends State<TestWidget> {
   Widget build(BuildContext context) {
     return Text(ShareDataWidget.of(context).data.toString());
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -90,7 +98,8 @@ class _TestWidgetState extends State<TestWidget> {
 
 class InheritedWidgetTestRoute extends StatefulWidget {
   @override
-  _InheritedWidgetTestRouteState createState() => _InheritedWidgetTestRouteState();
+  _InheritedWidgetTestRouteState createState() =>
+      _InheritedWidgetTestRouteState();
 }
 
 class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
@@ -104,9 +113,9 @@ class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
           TestWidget(),
           RaisedButton(
             child: Text("添加一个"),
-            onPressed: (){
+            onPressed: () {
               setState(() {
-               count++; 
+                count++;
               });
             },
           )
@@ -116,3 +125,213 @@ class _InheritedWidgetTestRouteState extends State<InheritedWidgetTestRoute> {
   }
 }
 
+class Provider<T> extends InheritedWidget {
+  Provider({@required this.data, Widget child}) : super(child: child);
+  final T data;
+
+  @override
+  bool updateShouldNotify(old) {
+    return true;
+  }
+} //
+
+class ChangeNotifier implements Listenable {
+  @override
+  void addListener(listener) {
+    // TODO: implement addListener
+  }
+
+  @override
+  void removeListener(listener) {
+    // TODO: implement removeListener
+  }
+  void notifyListeners() {
+    //通知所有监听器，触发监听器回调
+  }
+}
+
+Type _typeof<T>() => T;
+
+class ChangeModel<T extends ChangeNotifier> extends StatefulWidget {
+  ChangeModel({Key key, this.data, this.child});
+  final T data;
+  final Widget child;
+  static T of<T>(BuildContext context) {
+    final type = _typeof<Provider<T>>();
+    final provider = context.inheritFromWidgetOfExactType(type) as Provider<T>;
+    return provider.data;
+  }
+
+  @override
+  _ChangeModelState<T> createState() => _ChangeModelState<T>();
+}
+
+class _ChangeModelState<T extends ChangeNotifier>
+    extends State<ChangeModel<T>> {
+  void update() {
+    setState(() {});
+  }
+
+  @override
+  void didUpdateWidget(ChangeModel<T> oldWidget) {
+    if (widget.data != oldWidget.data) {
+      oldWidget.data.removeListener(update);
+      oldWidget.data.addListener(update);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    widget.data.addListener(update);
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.data.removeListener(update);
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Provider(data: widget.data, child: widget.child);
+  }
+}
+
+class Item {
+  Item(this.price, this.count);
+  double price;
+  int count;
+}
+
+class CartModel extends ChangeNotifier {
+  final List<Item> _list = [];
+  //禁止改变购物车里的商品信息
+  UnmodifiableListView<Item> get items => UnmodifiableListView(_list);
+  double get totalPrice =>
+      _list.fold(0, (value, item) => value + item.count * item.price);
+  void add(Item item) {
+    _list.add(item);
+    notifyListeners();
+  }
+}
+
+class Shop extends StatefulWidget {
+  @override
+  _ShopState createState() => _ShopState();
+}
+
+class _ShopState extends State<Shop> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: ChangeModel<CartModel>(
+            data: CartModel(),
+            child: Column(
+              children: <Widget>[
+                Builder(
+                  builder: (context) {
+                    var cart = ChangeModel.of<CartModel>(context);
+                    return Text("总价: ${cart.totalPrice}");
+                  },
+                ),
+                Builder(
+                  builder: (context) {
+                    return RaisedButton(
+                      child: Text("添加商品"),
+                      onPressed: () {
+                        ChangeModel.of<CartModel>(context).add(Item(20, 1));
+                      },
+                    );
+                  },
+                )
+              ],
+            )));
+  }
+}
+
+class NavBar extends StatelessWidget {
+  final Color color;
+  NavBar({Key key, this.color});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: color, boxShadow: [
+          BoxShadow(blurRadius: 4.0, color: color, offset: Offset(0, 3))
+        ]),
+        width: double.infinity,
+        height: 50.0,
+        child: GestureDetector(
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return ThemeRoute();
+            }));
+          },
+          child: Text(
+          "标题",
+          style: TextStyle(
+              color:
+                  color.computeLuminance() < 0.5 ? Colors.white : Colors.black),
+        ),
+        ));
+  }
+}
+
+class ThemeRoute extends StatefulWidget {
+  @override
+  _ThemeRouteState createState() => _ThemeRouteState();
+}
+
+class _ThemeRouteState extends State<ThemeRoute> {
+  Color _themeColor = Colors.teal;
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+    return Theme(
+      data: ThemeData(
+        primarySwatch: _themeColor,
+        iconTheme: IconThemeData(color: _themeColor),
+      ),
+      child: Scaffold(
+          appBar: AppBar(title: Text("主题测试")),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.favorite),
+                    Icon(Icons.airport_shuttle),
+                    Text("颜色跟随主题")
+                  ]),
+                  Theme(
+                    data:themeData.copyWith(
+                      iconTheme: IconThemeData(color:Colors.black)
+                    ),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.favorite),
+                    Icon(Icons.airport_shuttle),
+                    Text("  颜色固定黑色")
+                      ],
+                    )
+                  )
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _themeColor =
+                    _themeColor == Colors.teal ? Colors.blue : Colors.teal;
+              });
+            },
+          )),
+    );
+  }
+}

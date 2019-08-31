@@ -104,3 +104,5 @@ FormField(
 >InheritedWidget中of方法中context的方法  
 >1. context.inheritFromWidgetOfExactType(ShareDataWidget);调用的时候会触发子组件的didChangeDependencies的方法    
 >2. context.ancestorInheritedElementForWidgetOfExactType(Widget).widget;不会触发子组件的didChangeDependencies的方法  
+* Color  
+> color.computeLuminance**获取颜色0-1的值颜色越大颜色越浅**
