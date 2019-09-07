@@ -15,7 +15,10 @@ class FeatureBox extends StatelessWidget {
         Shop(),
         NavBar(
           color: Colors.blue,
-        )
+        ),
+        FutureBuilderBox(),
+        StreamBox(),
+        AlertBox()
       ],
     ));
   }
@@ -266,17 +269,18 @@ class NavBar extends StatelessWidget {
         width: double.infinity,
         height: 50.0,
         child: GestureDetector(
-          onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context){
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return ThemeRoute();
             }));
           },
           child: Text(
-          "标题",
-          style: TextStyle(
-              color:
-                  color.computeLuminance() < 0.5 ? Colors.white : Colors.black),
-        ),
+            "标题",
+            style: TextStyle(
+                color: color.computeLuminance() < 0.5
+                    ? Colors.white
+                    : Colors.black),
+          ),
         ));
   }
 }
@@ -309,19 +313,17 @@ class _ThemeRouteState extends State<ThemeRoute> {
                     Icon(Icons.airport_shuttle),
                     Text("颜色跟随主题")
                   ]),
-                  Theme(
-                    data:themeData.copyWith(
-                      iconTheme: IconThemeData(color:Colors.black)
-                    ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.favorite),
-                    Icon(Icons.airport_shuttle),
-                    Text("  颜色固定黑色")
-                      ],
-                    )
-                  )
+              Theme(
+                  data: themeData.copyWith(
+                      iconTheme: IconThemeData(color: Colors.black)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.favorite),
+                      Icon(Icons.airport_shuttle),
+                      Text("  颜色固定黑色")
+                    ],
+                  ))
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -332,6 +334,233 @@ class _ThemeRouteState extends State<ThemeRoute> {
               });
             },
           )),
+    );
+  }
+}
+
+Future<String> mockNetWorkData() async {
+  return Future.delayed(Duration(seconds: 2), () => "我是从互联网上获取的数据");
+}
+
+class FutureBuilderBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: FutureBuilder(
+      future: mockNetWorkData(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            // 请求失败，显示错误
+            return Text("Error: ${snapshot.error}");
+          } else {
+            // 请求成功，显示数据
+            return Text("Contents: ${snapshot.data}");
+          }
+        } else {
+          // 请求未结束，显示loading
+          return CircularProgressIndicator();
+        }
+      },
+    ));
+  }
+}
+
+Stream<int> counter() {
+  return Stream.periodic(Duration(seconds: 1), (i) {
+    return i;
+  });
+}
+
+//适用于websocket
+class StreamBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: counter(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasError) {
+          return Text("Error:${snapshot.error}");
+        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return Text("没有Stream");
+          case ConnectionState.waiting:
+            return Text("等待数据");
+          case ConnectionState.active:
+            return Text("active:${snapshot.data}");
+          case ConnectionState.done:
+            return Text("stream关闭");
+        }
+        return null;
+      },
+    );
+  }
+}
+
+Future alert() {
+  return Future.delayed(Duration(seconds: 2), () => "fsdfsd");
+}
+
+class AlertBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: alert(),
+      initialData: false,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Text("Error: ${snapshot.error}");
+          } else {
+            return Column(
+              children: <Widget>[
+                Container(
+                    child: AlertDialog(
+                  title: Text("提示"),
+                  content: Text("你确定要删除当前文件吗？"),
+                  actions: <Widget>[
+                    RaisedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text("取消", style: TextStyle(color: Colors.white)),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                      child: Text("确认", style: TextStyle(color: Colors.white)),
+                    )
+                  ],
+                )),
+                Center(
+                  child: RaisedButton(
+                      onPressed: () async {
+                        var dialog;
+                        dialog = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("这是被等待出现的弹框"),
+                                actions: <Widget>[
+                                  RaisedButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: Text("取消",
+                                        style: TextStyle(color: Colors.white)),
+                                  ),
+                                  RaisedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                    child: Text("确认",
+                                        style: TextStyle(color: Colors.white)),
+                                  )
+                                ],
+                              );
+                            });
+                        print(dialog);
+                      },
+                      child: Text("弹出弹框")),
+                ),
+                Center(
+                    child: RaisedButton(
+                        onPressed: () async {
+                          var dialog;
+                          dialog = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SimpleDialog(
+                                title: Text("请选择语言"),
+                                children: <Widget>[
+                                  SimpleDialogOption(
+                                      onPressed: () {
+                                        Navigator.pop(context, 1);
+                                      },
+                                      child: Text("中文")),
+                                  SimpleDialogOption(
+                                      onPressed: () {
+                                        Navigator.pop(context, 2);
+                                      },
+                                      child: Text("英文"))
+                                ],
+                              );
+                            },
+                          );
+                          print(dialog);
+                        },
+                        child: Text("弹出对话框"))),
+                Center(
+                  child: RaisedButton(
+                      onPressed: () {
+                        return showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("列表"),
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    children: <Widget>[
+                                      ListTile(
+                                        title: Text("1"),
+                                      ),
+                                      ListTile(
+                                        title: Text("1"),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      child: Text("弹出一个带有列表的弹出框")),
+                ),
+                Center(
+                  child:RaisedButton(
+                    onPressed: ()async{
+                      var index = await showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return AlertDialog(
+                            title: Text("延迟加载列表"),
+                            content: ListView(
+                              children: <Widget>[
+                                ListTile(title:Text("fjsdk"),onTap:() => Navigator.of(context).pop(1),),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+                                ListTile(title:Text("fjsdk")),
+
+                              ],
+                            ),
+                          );
+                        }
+                      );
+                     print(index);
+                    },
+                    child: Text("通过dialog弹出一个延迟加载的列表页"),
+                  )
+
+                )
+              ],
+            );
+          }
+        }else{
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }

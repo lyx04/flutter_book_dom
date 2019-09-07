@@ -105,4 +105,8 @@ FormField(
 >1. context.inheritFromWidgetOfExactType(ShareDataWidget);调用的时候会触发子组件的didChangeDependencies的方法    
 >2. context.ancestorInheritedElementForWidgetOfExactType(Widget).widget;不会触发子组件的didChangeDependencies的方法  
 * Color  
-> color.computeLuminance**获取颜色0-1的值颜色越大颜色越浅**
+> color.computeLuminance**获取颜色0-1的值颜色越大颜色越浅**  
+* Dialog(弹框)  
+> 使用**showDialog**对于**AlertDialog/SimpleDialog**进行显示  
+> 使用**Dialog**可以在content中添加延迟加载模型的组件  
+> 想要得到点击弹框列表中的值需要使用Navigator.of(context).pop(XXX)并且还需要在showDialog前使用await等待点击后值的返回  
