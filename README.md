@@ -109,4 +109,16 @@ FormField(
 * Dialog(弹框)  
 > 使用**showDialog**对于**AlertDialog/SimpleDialog**进行显示  
 > 使用**Dialog**可以在content中添加延迟加载模型的组件  
-> 想要得到点击弹框列表中的值需要使用Navigator.of(context).pop(XXX)并且还需要在showDialog前使用await等待点击后值的返回  
+> 想要得到点击弹框列表中的值需要使用Navigator.of(context).pop(XXX)并且还需要在showDialog前使用await等待点击后值的返回  、
+* 自定义弹框  
+```dart
+showGeneralDialog({
+  @required BuildContext context,
+  @required RoutePageBuilder pageBuilder, //构建对话框内部UI
+  bool barrierDismissible, //点击遮罩是否关闭对话框
+  String barrierLabel, // 语义化标签(用于读屏软件)
+  Color barrierColor, // 遮罩颜色
+  Duration transitionDuration, // 对话框打开/关闭的动画时长
+  RouteTransitionsBuilder transitionBuilder, // 对话框打开/关闭的动画
+})
+```

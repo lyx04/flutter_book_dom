@@ -18,7 +18,8 @@ class FeatureBox extends StatelessWidget {
         ),
         FutureBuilderBox(),
         StreamBox(),
-        AlertBox()
+        AlertBox(),
+        UserDialog()
       ],
     ));
   }
@@ -413,7 +414,8 @@ class AlertBox extends StatelessWidget {
           if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
           } else {
-            return Column(
+            return Center(
+                child: Column(
               children: <Widget>[
                 Container(
                     child: AlertDialog(
@@ -515,51 +517,166 @@ class AlertBox extends StatelessWidget {
                       child: Text("弹出一个带有列表的弹出框")),
                 ),
                 Center(
-                  child:RaisedButton(
-                    onPressed: ()async{
-                      var index = await showDialog(
+                    child: RaisedButton(
+                  onPressed: () async {
+                    var index = await showDialog(
                         context: context,
-                        builder: (BuildContext context){
+                        builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text("延迟加载列表"),
                             content: ListView(
                               children: <Widget>[
-                                ListTile(title:Text("fjsdk"),onTap:() => Navigator.of(context).pop(1),),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-                                ListTile(title:Text("fjsdk")),
-
+                                ListTile(
+                                  title: Text("fjsdk"),
+                                  onTap: () => Navigator.of(context).pop(1),
+                                ),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
+                                ListTile(title: Text("fjsdk")),
                               ],
                             ),
                           );
-                        }
-                      );
-                     print(index);
-                    },
-                    child: Text("通过dialog弹出一个延迟加载的列表页"),
-                  )
-
+                        });
+                    print(index);
+                  },
+                  child: Text("通过dialog弹出一个延迟加载的列表页"),
+                )),
+                Center(
+                  child: RaisedButton(
+                      onPressed: () {
+                        return showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return UnconstrainedBox(
+                                  constrainedAxis: Axis.vertical,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(maxWidth: 280),
+                                    child: Material(
+                                      child: ListView(
+                                        children: <Widget>[
+                                          ListTile(
+                                            title: Text("fjsdk"),
+                                            onTap: () =>
+                                                Navigator.of(context).pop(1),
+                                          ),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                          ListTile(title: Text("fjsdk")),
+                                        ],
+                                      ),
+                                      type: MaterialType.card,
+                                    ),
+                                  ));
+                            });
+                      },
+                      child: Text("这是自定义弹框")),
                 )
               ],
-            );
+            ));
           }
-        }else{
+        } else {
           return CircularProgressIndicator();
         }
+      },
+    );
+  }
+}
+
+//自定义弹框
+Future<T> showCustomDialog<T>(
+    {@required BuildContext context,
+    bool barrierDismissible = true,
+    WidgetBuilder builder}) {
+  final ThemeData theme = Theme.of(context, shadowThemeOnly: true);
+  return showGeneralDialog(
+    //是showDialog的底层类
+    context: context,
+    pageBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
+      final Widget pageChild = Builder(builder: builder);
+      return SafeArea(//这是啥?
+          child: Builder(
+        builder: (BuildContext context) {
+          return theme != null
+              ? Theme(data: theme, child: pageChild)
+              : pageChild;
+        },
+      ));
+    },
+    barrierDismissible: barrierDismissible, //点击遮罩层是否关闭对话框
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: Colors.black87,
+    transitionDuration: Duration(milliseconds: 150),
+    transitionBuilder: _buildMaterialDialogTransitions,
+  );
+}
+
+//自定义弹框的动画效果
+Widget _buildMaterialDialogTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimtion,
+    Widget child) {
+  return ScaleTransition(
+    scale: CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOut,
+    ),
+    child: child,
+  );
+}
+
+Future _userAlert() {
+  return Future.delayed(Duration(seconds: 2), () => "我是");
+}
+
+class UserDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _userAlert(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Center(
+            child: RaisedButton(
+                onPressed: () {
+                  showCustomDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("自定义弹框"),
+                          content: Container(child: Text("这是内容")),
+                        );
+                      });
+                },
+                child: Text("自定义弹框")));
       },
     );
   }
