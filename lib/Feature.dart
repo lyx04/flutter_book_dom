@@ -20,7 +20,9 @@ class FeatureBox extends StatelessWidget {
         StreamBox(),
         AlertBox(),
         UserDialog(),
-        DialogState()
+        DialogState(),
+        BottomSheet(),
+        ScreenbottomSheet()
       ],
     ));
   }
@@ -694,7 +696,7 @@ class _DialogStateState extends State<DialogState> {
     return RaisedButton(
       child: Text("带有状态的弹框"),
       onPressed: () async {
-        var delect = await showDialog(
+        var delect = await showCustomDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
@@ -717,12 +719,37 @@ class _DialogStateState extends State<DialogState> {
                     Row(
                       children: <Widget>[
                         Text("同时删除子目录"),
-                        UserCheckbox(
+                        // StatefulBuilder(
+                        //   builder: (BuildContext context, state) {
+                        //      return Checkbox(
+                        //       value: dialogstate,
+                        //       onChanged: (v) {
+                        //         state(() {
+                        //           dialogstate = v;
+                        //         });
+                        //       },
+                        //     );
+                        //   },
+                        // )
+                        /////////////////////////////////////////////////////////////////////////
+                        Checkbox(
                           value: dialogstate,
-                          onChange: (v) {
-                            setState(() {
-                              dialogstate = v;
-                            });
+                          onChanged: (v) {
+                            (context as Element)
+                                .markNeedsBuild(); //此处的context是Dialog的,为此可以把修改状态的context改成checkbox的
+                            dialogstate = v;
+                          },
+                        ),
+                        ////////////////////////////////////////////////////////////////////////
+                        Builder(
+                          builder: (BuildContext context) {
+                            return Checkbox(
+                              value: dialogstate,
+                              onChanged: (v) {
+                                (context as Element).markNeedsBuild();
+                                dialogstate = v;
+                              },
+                            );
                           },
                         )
                       ],
@@ -737,6 +764,21 @@ class _DialogStateState extends State<DialogState> {
   }
 }
 
+class StatefulBuilder extends StatefulWidget {
+  const StatefulBuilder({Key key, @required this.builder})
+      : assert(builder != null),
+        super(key: key);
+  final StatefulWidgetBuilder builder;
+  @override
+  _StatefulBuilderState createState() => _StatefulBuilderState();
+}
+
+class _StatefulBuilderState extends State<StatefulBuilder> {
+  @override
+  Widget build(BuildContext context) => widget.builder(context, setState);
+}
+
+//创建自己的context并管理状态
 class UserCheckbox extends StatefulWidget {
   UserCheckbox({Key key, this.value, @required this.onChange});
   final bool value;
@@ -764,6 +806,82 @@ class _UserCheckboxState extends State<UserCheckbox> {
           value = v;
         });
       },
+    );
+  }
+}
+
+PersistentBottomSheetController _showbottom(BuildContext con) {
+  return showBottomSheet(
+      context: con,
+      builder: (BuildContext context) {
+        return ListView.builder(
+            itemCount: 20,
+            itemBuilder: (BuildContext context, index) {
+              return ListTile(
+                title: Text("${index}"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+      });
+}
+
+class BottomSheet extends StatefulWidget {
+  @override
+  _BottomSheetState createState() => _BottomSheetState();
+}
+
+class _BottomSheetState extends State<BottomSheet> {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              elevation: 0.0,
+              builder: (BuildContext context) {
+                return ListView.builder(
+                  itemCount: 30,
+                  itemBuilder: (BuildContext context, index) {
+                    return ListTile(
+                      title: Text("${index}"),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                );
+              });
+        },
+        child: Text("底部弹窗"));
+  }
+}
+
+class ScreenbottomSheet extends StatefulWidget {
+  @override
+  _ScreenbottomSheetState createState() => _ScreenbottomSheetState();
+}
+
+class _ScreenbottomSheetState extends State<ScreenbottomSheet> {
+  @override
+  Widget build(BuildContext context) {
+    
+    return Column(
+      children: <Widget>[
+        RaisedButton(
+          onPressed: () {
+            _showbottom(context);
+          },
+          child: Text("全屏弹窗"),
+        ),
+        RaisedButton(
+          onPressed: () {
+              // Scaffold.of(context).showBottomSheet()
+          },
+          child: Text("打开全屏"),
+        ),
+      ],
     );
   }
 }
