@@ -19,7 +19,8 @@ class FeatureBox extends StatelessWidget {
         FutureBuilderBox(),
         StreamBox(),
         AlertBox(),
-        UserDialog()
+        UserDialog(),
+        DialogState()
       ],
     ));
   }
@@ -662,21 +663,106 @@ class UserDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _userAlert(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Center(
-            child: RaisedButton(
-                onPressed: () {
-                  showCustomDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("自定义弹框"),
-                          content: Container(child: Text("这是内容")),
-                        );
-                      });
-                },
-                child: Text("自定义弹框")));
+        future: _userAlert(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Center(
+              child: RaisedButton(
+                  onPressed: () {
+                    showCustomDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("自定义弹框"),
+                            content: Container(child: Text("这是内容")),
+                          );
+                        });
+                  },
+                  child: Text("自定义弹框")));
+        });
+  }
+}
+
+class DialogState extends StatefulWidget {
+  @override
+  _DialogStateState createState() => _DialogStateState();
+}
+
+class _DialogStateState extends State<DialogState> {
+  bool dialogstate = false;
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text("带有状态的弹框"),
+      onPressed: () async {
+        var delect = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("提示"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("取消"),
+                    onPressed: () {},
+                  ),
+                  FlatButton(
+                    child: Text("确定"),
+                    onPressed: () {
+                      Navigator.of(context).pop(dialogstate);
+                    },
+                  )
+                ],
+                content: Column(
+                  children: <Widget>[
+                    Text("您确定要删除当前文件么？"),
+                    Row(
+                      children: <Widget>[
+                        Text("同时删除子目录"),
+                        UserCheckbox(
+                          value: dialogstate,
+                          onChange: (v) {
+                            setState(() {
+                              dialogstate = v;
+                            });
+                          },
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              );
+            });
+        print("状态是${delect}");
+      },
+    );
+  }
+}
+
+class UserCheckbox extends StatefulWidget {
+  UserCheckbox({Key key, this.value, @required this.onChange});
+  final bool value;
+  final ValueChanged<bool> onChange;
+  @override
+  _UserCheckboxState createState() => _UserCheckboxState();
+}
+
+class _UserCheckboxState extends State<UserCheckbox> {
+  bool value;
+  @override
+  void initState() {
+    // TODO: implement initState
+    value = widget.value;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      value: value,
+      onChanged: (v) {
+        widget.onChange(v);
+        setState(() {
+          value = v;
+        });
       },
     );
   }
