@@ -72,6 +72,7 @@ FormField(
 ),
 ```
 ## 布局类
+UnconstrainedBox取消父的宽高限制  
 * Flex  
 >使用direction:Axis.vertical纵向的需要一个确定的高度 例如使用container作为父容器  
 * Stack  
@@ -109,7 +110,7 @@ FormField(
 * Dialog(弹框)  
 > 使用**showDialog**对于**AlertDialog/SimpleDialog**进行显示  
 > 使用**Dialog**可以在content中添加延迟加载模型的组件  
-> 想要得到点击弹框列表中的值需要使用Navigator.of(context).pop(XXX)并且还需要在showDialog前使用await等待点击后值的返回  、
+> 想要得到点击弹框列表中的值需要使用Navigator.of(context).pop(XXX)并且还需要在showDialog前使用await等待点击后值的返回  
 * 自定义弹框  
 ```dart
 showGeneralDialog({

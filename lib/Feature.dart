@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 
 class FeatureBox extends StatelessWidget {
@@ -22,7 +24,9 @@ class FeatureBox extends StatelessWidget {
         UserDialog(),
         DialogState(),
         BottomSheet(),
-        ScreenbottomSheet()
+        ScreenbottomSheet(),
+        DatePicker(),
+        IOSDatePicker()
       ],
     ));
   }
@@ -866,7 +870,6 @@ class ScreenbottomSheet extends StatefulWidget {
 class _ScreenbottomSheetState extends State<ScreenbottomSheet> {
   @override
   Widget build(BuildContext context) {
-    
     return Column(
       children: <Widget>[
         RaisedButton(
@@ -877,11 +880,86 @@ class _ScreenbottomSheetState extends State<ScreenbottomSheet> {
         ),
         RaisedButton(
           onPressed: () {
-              // Scaffold.of(context).showBottomSheet()
+            Scaffold.of(context).showBottomSheet((BuildContext context) {
+              return ListView.builder(
+                  itemCount: 20,
+                  itemBuilder: (BuildContext context, index) {
+                    return ListTile(
+                      title: Text("${index}"),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  });
+            });
           },
-          child: Text("打开全屏"),
+          child: Text("scaffold打开全屏"),
         ),
       ],
+    );
+  }
+}
+
+class DatePicker extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        // return selectedDate;
+        return RaisedButton(
+          onPressed: () {
+            var date = DateTime.now();
+            showDatePicker(
+              selectableDayPredicate: (DateTime data) {
+                print(data);
+                return true;
+              },
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2018),
+              lastDate: DateTime(9999),
+              builder: (BuildContext context, Widget child) {
+                return Theme(
+                  data: ThemeData.light(),
+                  child: child,
+                );
+              },
+            );
+          },
+          child: Text("查看android日历"),
+        );
+      },
+    );
+  }
+}
+
+class IOSDatePicker extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        var date = new DateTime.now();
+        return RaisedButton(
+            onPressed: () {
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SizedBox(
+                        height: 200.0,
+                          child: CupertinoDatePicker(
+                            mode: CupertinoDatePickerMode.dateAndTime,
+                            minimumDate: date,
+                            maximumDate: DateTime(2020),
+                            maximumYear: date.year + 3,
+                            onDateTimeChanged: (DateTime value) {
+                              print(value);
+                            },
+                          ),
+                        );
+                  });
+            },
+            child: Text("IOS日历"));
+      },
     );
   }
 }
