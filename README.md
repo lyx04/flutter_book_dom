@@ -123,3 +123,9 @@ showGeneralDialog({
   RouteTransitionsBuilder transitionBuilder, // 对话框打开/关闭的动画
 })
 ```
+## 第八章Event  
+* Listener  
+> brhavior 决定子组件如何响应命中测试  
+> deferToChild 只会点击到子组件才会有用并且不是透明的  
+> opaque 效果可以作用于整个widget  
+> translucent 顶部的组件与底部组件都可以接收到
