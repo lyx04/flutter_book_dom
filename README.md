@@ -77,6 +77,7 @@ UnconstrainedBox取消父的宽高限制
 >使用direction:Axis.vertical纵向的需要一个确定的高度 例如使用container作为父容器  
 * Stack  
 >需要在一个固定的容器里面
+>positioned必须在stack中
 * Tranform  
 >Tranform的变换在渲染阶段，所以占用空间的大小和位置是不变的，会产生文字重叠的情况  
 >使用RotateBox,RotateBox的变换在layout阶段，会影响大小和位置
@@ -126,6 +127,9 @@ showGeneralDialog({
 ## 第八章Event  
 * Listener  
 > brhavior 决定子组件如何响应命中测试  
-> deferToChild 只会点击到子组件才会有用并且不是透明的  
-> opaque 效果可以作用于整个widget  
-> translucent 顶部的组件与底部组件都可以接收到
+1. deferToChild 只会点击到子组件才会有用并且不是透明的  
+2. opaque 效果可以作用于整个widget  
+3. translucent 顶部的组件与底部组件都可以接收到 顶部组件的空白地方可以"点透"  
+> 忽略PointerEvent  
+1. AbsorbPointer他之后的子树不接受指针事件  
+2. IgnorePointer不允许参与命中测试
