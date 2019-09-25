@@ -11,7 +11,9 @@ class EventBox extends StatelessWidget {
           BehaviorTranslucentBox(),
           IgnoreBox(),
           GestureDetectorBox(),
-          FontMove()
+          FontMove(),
+          OnlyMove(),
+          ScaleBox()
         ],
       ),
     );
@@ -135,22 +137,20 @@ class _FontMoveState extends State<FontMove> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-        constraints: BoxConstraints.tight(Size(300.0,300.0)),
+        constraints: BoxConstraints.tight(Size(300.0, 300.0)),
         child: Stack(
           children: <Widget>[
             Positioned(
                 left: _left,
                 top: _top,
                 child: GestureDetector(
-                  onPanDown: (e){
-
-                  },
-                  onPanUpdate: (e){
-                    setState(() {
-                     _left += e.delta.dx;
-                     _top += e.delta.dy; 
-                    });
-                  },
+                    onPanDown: (e) {},
+                    onPanUpdate: (e) {
+                      setState(() {
+                        _left += e.delta.dx;
+                        _top += e.delta.dy;
+                      });
+                    },
                     child: CircleAvatar(
                         radius: 10.0,
                         backgroundColor: Colors.blue,
@@ -160,5 +160,55 @@ class _FontMoveState extends State<FontMove> {
                         ))))
           ],
         ));
+  }
+}
+
+class OnlyMove extends StatefulWidget {
+  @override
+  _OnlyMoveState createState() => _OnlyMoveState();
+}
+
+class _OnlyMoveState extends State<OnlyMove> {
+  double _top = 0.0;
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+        constraints: BoxConstraints.tight(Size(300.0, 300.0)),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              top:_top,
+                child: GestureDetector(
+              child: CircleAvatar(child: Text("A")),
+              onVerticalDragUpdate: (DragUpdateDetails detail) {
+                setState(() {
+                  _top += detail.delta.dy;
+                });
+              },
+            ))
+          ],
+        ));
+  }
+}
+
+class ScaleBox extends StatefulWidget {
+  @override
+  _ScaleBoxState createState() => _ScaleBoxState();
+}
+
+class _ScaleBoxState extends State<ScaleBox> {
+  double _width = 100.0;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child:GestureDetector(
+        onScaleUpdate: (ScaleUpdateDetails details){
+          setState(() {
+           _width =  200*details.scale.clamp(0.8, 10.0);
+          });
+        },
+        child:Image.network("https://cdn.jsdelivr.net/gh/flutterchina/flutter-in-action/docs/imgs/8-4.png",width:_width)
+      )
+    );
   }
 }
