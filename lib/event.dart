@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:flutter_book_dom/Feature.dart';
 
 class EventBox extends StatelessWidget {
   @override
@@ -11,7 +10,8 @@ class EventBox extends StatelessWidget {
           BehaviorTranslucentBox(),
           IgnoreBox(),
           GestureDetectorBox(),
-          FontMove()
+          FontMove(),
+          OnlyMove()
         ],
       ),
     );
@@ -135,22 +135,20 @@ class _FontMoveState extends State<FontMove> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-        constraints: BoxConstraints.tight(Size(300.0,300.0)),
+        constraints: BoxConstraints.tight(Size(300.0, 300.0)),
         child: Stack(
           children: <Widget>[
             Positioned(
                 left: _left,
                 top: _top,
                 child: GestureDetector(
-                  onPanDown: (e){
-
-                  },
-                  onPanUpdate: (e){
-                    setState(() {
-                     _left += e.delta.dx;
-                     _top += e.delta.dy; 
-                    });
-                  },
+                    onPanDown: (e) {},
+                    onPanUpdate: (e) {
+                      setState(() {
+                        _left += e.delta.dx;
+                        _top += e.delta.dy;
+                      });
+                    },
                     child: CircleAvatar(
                         radius: 10.0,
                         backgroundColor: Colors.blue,
@@ -158,6 +156,39 @@ class _FontMoveState extends State<FontMove> {
                           "A",
                           style: TextStyle(color: Colors.white),
                         ))))
+          ],
+        ));
+  }
+}
+
+class OnlyMove extends StatefulWidget {
+  @override
+  _OnlyMoveState createState() => _OnlyMoveState();
+}
+
+class _OnlyMoveState extends State<OnlyMove> {
+  double _top = 0.0;
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+        constraints: BoxConstraints.tight(Size(300.0, 300.0)),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+                top: _top,
+                child: GestureDetector(
+                  child: CircleAvatar(child: Text("A")),
+                  onVerticalDragUpdate: (DragUpdateDetails details) {
+                    setState(() {
+                      print(details.delta.dy);
+                      // if (details.delta.dy <=0) {
+                      //   _top = 0;
+                      // } else {
+                        _top += details.delta.dy;
+                      // }
+                    });
+                  },
+                ))
           ],
         ));
   }
