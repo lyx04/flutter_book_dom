@@ -11,7 +11,12 @@ class EventBox extends StatelessWidget {
           IgnoreBox(),
           GestureDetectorBox(),
           FontMove(),
+<<<<<<< HEAD
           OnlyMove()
+=======
+          OnlyMove(),
+          ScaleBox()
+>>>>>>> 9812fabf5150456a27460ec65543ce8141228667
         ],
       ),
     );
@@ -175,21 +180,38 @@ class _OnlyMoveState extends State<OnlyMove> {
         child: Stack(
           children: <Widget>[
             Positioned(
-                top: _top,
+              top:_top,
                 child: GestureDetector(
-                  child: CircleAvatar(child: Text("A")),
-                  onVerticalDragUpdate: (DragUpdateDetails details) {
-                    setState(() {
-                      print(details.delta.dy);
-                      // if (details.delta.dy <=0) {
-                      //   _top = 0;
-                      // } else {
-                        _top += details.delta.dy;
-                      // }
-                    });
-                  },
-                ))
+              child: CircleAvatar(child: Text("A")),
+              onVerticalDragUpdate: (DragUpdateDetails detail) {
+                setState(() {
+                  _top += detail.delta.dy;
+                });
+              },
+            ))
           ],
         ));
+  }
+}
+
+class ScaleBox extends StatefulWidget {
+  @override
+  _ScaleBoxState createState() => _ScaleBoxState();
+}
+
+class _ScaleBoxState extends State<ScaleBox> {
+  double _width = 100.0;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child:GestureDetector(
+        onScaleUpdate: (ScaleUpdateDetails details){
+          setState(() {
+           _width =  200*details.scale.clamp(0.8, 10.0);
+          });
+        },
+        child:Image.network("https://cdn.jsdelivr.net/gh/flutterchina/flutter-in-action/docs/imgs/8-4.png",width:_width)
+      )
+    );
   }
 }
