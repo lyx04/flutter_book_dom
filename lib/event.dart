@@ -11,12 +11,8 @@ class EventBox extends StatelessWidget {
           IgnoreBox(),
           GestureDetectorBox(),
           FontMove(),
-<<<<<<< HEAD
-          OnlyMove()
-=======
           OnlyMove(),
           ScaleBox()
->>>>>>> 9812fabf5150456a27460ec65543ce8141228667
         ],
       ),
     );
