@@ -126,6 +126,7 @@ showGeneralDialog({
 ```
 ## 第八章Event  
 * Listener  
+> 在事件冲突时可以使用listener直接识别原始指针事件
 > brhavior 决定子组件如何响应命中测试  
 1. deferToChild 只会点击到子组件才会有用并且不是透明的  
 2. opaque 效果可以作用于整个widget  
@@ -135,11 +136,12 @@ showGeneralDialog({
 2. IgnorePointer不允许参与命中测试  
 > TextSpan中使用事件  
 1. 引入"package:flutter/gestures.dart";  
-2. //在TextSpan中使用recognizer 
+2. 在TextSpan中使用recognizer 
 ```dart
     recognizer: _tapGestureRecognizer..onTap = (){
         setState(() {
             _toggle = !_toggle; 
         });
     }
-```
+```  
+3. 一定要释放TapGestureRecognizer的内存**暂时不知道为什么要释放内存**

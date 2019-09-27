@@ -14,7 +14,9 @@ class EventBox extends StatelessWidget {
           FontMove(),
           OnlyMove(),
           ScaleBox(),
-          FontColor()
+          FontColor(),
+          WinEventWidget(),
+          Eventconflict()
         ],
       ),
     );
@@ -138,7 +140,7 @@ class _FontMoveState extends State<FontMove> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-        constraints: BoxConstraints.tight(Size(300.0, 300.0)),
+        constraints: BoxConstraints.tight(Size(50,50)),
         child: Stack(
           children: <Widget>[
             Positioned(
@@ -174,19 +176,19 @@ class _OnlyMoveState extends State<OnlyMove> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-        constraints: BoxConstraints.tight(Size(300.0, 300.0)),
+        constraints: BoxConstraints.tight(Size(50, 50)),
         child: Stack(
           children: <Widget>[
             Positioned(
-              top:_top,
+                top: _top,
                 child: GestureDetector(
-              child: CircleAvatar(child: Text("A")),
-              onVerticalDragUpdate: (DragUpdateDetails detail) {
-                setState(() {
-                  _top += detail.delta.dy;
-                });
-              },
-            ))
+                  child: CircleAvatar(child: Text("A")),
+                  onVerticalDragUpdate: (DragUpdateDetails detail) {
+                    setState(() {
+                      _top += detail.delta.dy;
+                    });
+                  },
+                ))
           ],
         ));
   }
@@ -202,15 +204,15 @@ class _ScaleBoxState extends State<ScaleBox> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child:GestureDetector(
-        onScaleUpdate: (ScaleUpdateDetails details){
-          setState(() {
-           _width =  200*details.scale.clamp(0.8, 10.0);
-          });
-        },
-        child:Image.network("https://cdn.jsdelivr.net/gh/flutterchina/flutter-in-action/docs/imgs/8-4.png",width:_width)
-      )
-    );
+        child: GestureDetector(
+            onScaleUpdate: (ScaleUpdateDetails details) {
+              setState(() {
+                _width = 200 * details.scale.clamp(0.8, 10.0);
+              });
+            },
+            child: Image.network(
+                "https://cdn.jsdelivr.net/gh/flutterchina/flutter-in-action/docs/imgs/8-4.png",
+                width: _width)));
   }
 }
 
@@ -222,33 +224,133 @@ class FontColor extends StatefulWidget {
 class _FontColorState extends State<FontColor> {
   TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
   bool _toggle = false;
-  @override 
+  @override
   void dispose() {
     // TODO: implement dispose
     _tapGestureRecognizer.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Text.rich(TextSpan(
-      children: [
-        TextSpan(text:"你好世界"),
-        TextSpan(
-          text:"点我变色",
+    return Text.rich(TextSpan(children: [
+      TextSpan(text: "你好世界"),
+      TextSpan(
+          text: "点我变色",
           style: TextStyle(
-            color:_toggle?Colors.black:Theme.of(context).accentColor,
-            fontSize: 30.0
+              color: _toggle ? Colors.black : Theme.of(context).accentColor,
+              fontSize: 30.0),
+          recognizer: _tapGestureRecognizer
+            ..onTap = () {
+              setState(() {
+                _toggle = !_toggle;
+              });
+            }),
+      TextSpan(text: "你好世界")
+    ]));
+  }
+}
+
+class WinEventWidget extends StatefulWidget {
+  @override
+  _WinEventWidgetState createState() => _WinEventWidgetState();
+}
+
+class _WinEventWidgetState extends State<WinEventWidget> {
+  double _left = 0.0;
+  double _top = 0.0;
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+        constraints: BoxConstraints.tight(Size(100.0,100.0)),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+                left: _left,
+                top: _top,
+                child: GestureDetector(
+                    onVerticalDragUpdate: (DragUpdateDetails details) {
+                      print("垂直移动");
+                      setState(() {
+                        _left += details.delta.dx;
+                        _top += details.delta.dy;
+                      });
+                    },
+                    onHorizontalDragUpdate: (DragUpdateDetails details) {
+                      print("水平移动");
+                      setState(() {
+                        _left += details.delta.dx;
+                        _top += details.delta.dy;
+                      });
+                    },
+                    child: CircleAvatar(
+                      child: Text("A"),
+                    )))
+          ],
+        ));
+  }
+}
+
+class Eventconflict extends StatefulWidget {
+  @override
+  _EventconflictState createState() => _EventconflictState();
+}
+
+class _EventconflictState extends State<Eventconflict> {
+  double _left = 0.0;
+  double _leftB = 0.0;
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints.tight(Size(100.0,300.0)),
+      child:Stack(
+        children: <Widget>[
+          Positioned(
+            left:_left,
+            child:GestureDetector(
+              child:CircleAvatar(
+                child:Text("A")
+              ),
+              onHorizontalDragUpdate: ( DragUpdateDetails details ){
+                setState(() {
+                 _left+= details.delta.dx; 
+                });
+              },
+              onTapDown: (TapDownDetails details){
+                print("按下了");
+              },
+              onTapUp: (TapUpDetails details){
+                print("抬起来");
+              },
+            )
           ),
-          recognizer: _tapGestureRecognizer..onTap = (){
-            setState(() {
-             _toggle = !_toggle; 
-            });
-          }
-        ),
-        TextSpan(
-          text:"你好世界"
-        )
-      ]
-    ));
+          Positioned(
+            top:100,
+            left:_leftB,
+            child: Listener(
+              onPointerDown: (details){
+                print("down");
+              },
+              onPointerUp:(details){
+                print("up");
+              },
+              child:GestureDetector(
+                child:CircleAvatar(
+                  child:Text("B")
+                ),
+                onHorizontalDragUpdate: (details){
+                  setState(() {
+                   _leftB += details.delta.dx; 
+                  });
+                },
+                onHorizontalDragEnd: (details){
+                  print("onHorizontalDragEnd");
+                },
+              )
+            ),
+          )
+        ],
+      )
+    );
   }
 }
