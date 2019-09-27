@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/gestures.dart";
 
 class EventBox extends StatelessWidget {
   @override
@@ -12,7 +13,8 @@ class EventBox extends StatelessWidget {
           GestureDetectorBox(),
           FontMove(),
           OnlyMove(),
-          ScaleBox()
+          ScaleBox(),
+          FontColor()
         ],
       ),
     );
@@ -209,5 +211,44 @@ class _ScaleBoxState extends State<ScaleBox> {
         child:Image.network("https://cdn.jsdelivr.net/gh/flutterchina/flutter-in-action/docs/imgs/8-4.png",width:_width)
       )
     );
+  }
+}
+
+class FontColor extends StatefulWidget {
+  @override
+  _FontColorState createState() => _FontColorState();
+}
+
+class _FontColorState extends State<FontColor> {
+  TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
+  bool _toggle = false;
+  @override 
+  void dispose() {
+    // TODO: implement dispose
+    _tapGestureRecognizer.dispose();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return  Text.rich(TextSpan(
+      children: [
+        TextSpan(text:"你好世界"),
+        TextSpan(
+          text:"点我变色",
+          style: TextStyle(
+            color:_toggle?Colors.black:Theme.of(context).accentColor,
+            fontSize: 30.0
+          ),
+          recognizer: _tapGestureRecognizer..onTap = (){
+            setState(() {
+             _toggle = !_toggle; 
+            });
+          }
+        ),
+        TextSpan(
+          text:"你好世界"
+        )
+      ]
+    ));
   }
 }

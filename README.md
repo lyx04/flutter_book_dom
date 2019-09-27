@@ -132,4 +132,14 @@ showGeneralDialog({
 3. translucent 顶部的组件与底部组件都可以接收到 顶部组件的空白地方可以"点透"  
 > 忽略PointerEvent  
 1. AbsorbPointer他之后的子树不接受指针事件  
-2. IgnorePointer不允许参与命中测试
+2. IgnorePointer不允许参与命中测试  
+> TextSpan中使用事件  
+1. 引入"package:flutter/gestures.dart";  
+2. ```dart
+    //在TextSpan中使用recognizer
+    recognizer: _tapGestureRecognizer..onTap = (){
+        setState(() {
+            _toggle = !_toggle; 
+        });
+    }
+```
