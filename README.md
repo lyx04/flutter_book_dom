@@ -135,8 +135,8 @@ showGeneralDialog({
 2. IgnorePointer不允许参与命中测试  
 > TextSpan中使用事件  
 1. 引入"package:flutter/gestures.dart";  
-2. ```dart
-    //在TextSpan中使用recognizer
+2. //在TextSpan中使用recognizer 
+```dart
     recognizer: _tapGestureRecognizer..onTap = (){
         setState(() {
             _toggle = !_toggle; 
