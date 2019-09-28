@@ -1,4 +1,4 @@
-//观察者模式中的发布者
+
 import "package:flutter/material.dart";
 import "middle.dart";
 
@@ -11,6 +11,7 @@ class ObserverBox extends StatelessWidget {
   }
 }
 
+//观察者模式中的订阅者
 class LoginA extends StatefulWidget {
   @override
   _LoginAState createState() => _LoginAState();
@@ -34,6 +35,7 @@ class _LoginAState extends State<LoginA> {
   }
 }
 
+//观察者模式中的发布者
 class LoginB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
