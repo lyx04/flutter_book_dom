@@ -4,13 +4,14 @@ import "./container.dart";
 import "./scroll.dart";
 import "./Feature.dart";
 import "./event.dart";
+import "Observer/publisher.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: EventBox()));
+    return MaterialApp(home: Scaffold(body: ObserverBox()));
   }
 }
 
