@@ -145,3 +145,27 @@ showGeneralDialog({
     }
 ```  
 3. 一定要释放TapGestureRecognizer的内存**暂时不知道为什么要释放内存**
+* NotificationListener  
+> 可以定义NotificationListener的监控类型  
+```dart
+//ScrollEndNotification滚动停止时触发
+NotificationListener<ScrollEndNotification>(
+    onNotification: (notification) {
+        print(notification);
+        // switch (notification.runtimeType) {
+        //   case ScrollStartNotification:
+        //     print("开始滚动");
+        //     break;
+        //   case ScrollUpdateNotification:
+        //     print("正在滚动");
+        //     break;
+        //   case ScrollEndNotification:
+        //     print("滚动停止");
+        //     break;
+        //   case OverscrollNotification:
+        //     print("滚动到边界");
+        //     break;
+        // }
+    })
+```  
+1. 假设NotificationListener嵌套，为了使子组件阻止冒泡,在onNotification中需要return true否则return false父组件NotificationListener的onNotification可以接收到通知  

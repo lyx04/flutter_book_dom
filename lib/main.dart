@@ -5,13 +5,14 @@ import "./scroll.dart";
 import "./Feature.dart";
 import "./event.dart";
 import "Observer/publisher.dart";
+import "NotificationBox.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: ObserverBox()));
+    return MaterialApp(home: Scaffold(body: NotificBox()));
   }
 }
 
