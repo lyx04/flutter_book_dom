@@ -169,3 +169,32 @@ NotificationListener<ScrollEndNotification>(
     })
 ```  
 1. 假设NotificationListener嵌套，为了使子组件阻止冒泡,在onNotification中需要return true否则return false父组件NotificationListener的onNotification可以接收到通知  
+## 动画  
+* Animation保存动画状态和插值的  
+> Animation<double>/Animation<Color>/Animation<Size> 通过Animation对象的value属性获取动画的当前状态值 
+> addListener() 给Animation添加帧监听器，每一帧都会被调用/addStatusListener()  添加"动画状态改变"监听器,动画开始(forward)、结束(completed)、正向(forward)、反向(reverse)时会调用状态改变的监听器  
+> 通常会将SingleTickerProviderStateMixin添加在state定义中  
+* Curve动画过程  
+> CurvedAnimation可以通过包装AnimationController与Curve结合生成一个新的动画对象  
+```dart
+    final CurvedAnimation curve = new CurvedAnimation(parent: controller,curve:Curves.easeIn);
+```   
+> AnimationController用于控制动画  
+```dart
+    final AnimationController controller = new AnimationController(duration:const Duration(milliseconds:2000),vsync:this)
+    final AnimationController controller = new AnimationController(duration:const Duration(milliseconds:2000),lowerBound:10.0,upperBoundL:20.0,vsync:this)
+```  
+> 构建一个控制器  
+```dart
+    final AnimationController ccontroller = new AnimationController(duration:const Duration(milliseconds:2000),vsync:this)
+```  
+> 构建一个曲线  
+```dart
+    final Animation curve = new CurvedAnimation(parent:controller,curve:Curves.easeOut)
+```  
+> 构建一个tween  
+```dart
+    Animation<int> alpha = new IntTween(begin:0;end:255).animate(curve)
+```  
+* 页面之间的动画跳转 MaterialPageRoute是与平台风格一致的动画/CupertinoPageRoute是Ios的动画风格/PageRouteBuilder是自定义动画风格  
+> 所有的路由动画都可以继承PageRoute来实现
