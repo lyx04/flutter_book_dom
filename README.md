@@ -186,7 +186,7 @@ NotificationListener<ScrollEndNotification>(
 ```  
 > 构建一个控制器  
 ```dart
-    final AnimationController ccontroller = new AnimationController(duration:const Duration(milliseconds:2000),vsync:this)
+    final AnimationController controller = new AnimationController(duration:const Duration(milliseconds:2000),vsync:this)
 ```  
 > 构建一个曲线  
 ```dart
@@ -194,7 +194,8 @@ NotificationListener<ScrollEndNotification>(
 ```  
 > 构建一个tween  
 ```dart
-    Animation<int> alpha = new IntTween(begin:0;end:255).animate(curve)
+    Animation<double> alpha = new Tween(begin:0;end:255).animate(controller)
 ```  
 * 页面之间的动画跳转 MaterialPageRoute是与平台风格一致的动画/CupertinoPageRoute是Ios的动画风格/PageRouteBuilder是自定义动画风格  
-> 所有的路由动画都可以继承PageRoute来实现
+> 所有的路由动画都可以继承PageRoute来实现  
+> FadeTransition淡入淡出动画/CurvedAnimation曲线动画  
