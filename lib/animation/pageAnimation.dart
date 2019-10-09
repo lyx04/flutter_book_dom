@@ -262,3 +262,4 @@ class FadeRoute extends PageRoute {
     }
   }
 }
+
