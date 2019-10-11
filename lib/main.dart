@@ -8,13 +8,14 @@ import "Observer/publisher.dart";
 import "NotificationBox.dart";
 import "animation/animation.dart";
 import "animation/pageAnimation.dart";
+import "animation/CommonAnimation.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: PageAnimation()));
+    return MaterialApp(home: Scaffold(body: CommonAnimation()));
   }
 }
 
