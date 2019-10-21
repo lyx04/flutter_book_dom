@@ -199,3 +199,19 @@ NotificationListener<ScrollEndNotification>(
 * 页面之间的动画跳转 MaterialPageRoute是与平台风格一致的动画/CupertinoPageRoute是Ios的动画风格/PageRouteBuilder是自定义动画风格  
 > 所有的路由动画都可以继承PageRoute来实现  
 > FadeTransition淡入淡出动画/CurvedAnimation曲线动画  
+> 一个子元素新旧值之间的切换(AnimatedSwitcher)AnimatedSwitcher的新旧child，如果类型相同，则Key必须不相等()。 
+```dart
+AnimatedSwitcher(
+    duration: Duration(milliseconds: 5000),
+    transitionBuilder: (Widget child, Animation<double> animtion) {
+        return FadeTransition(
+        child:child,
+        opacity:animtion
+        );
+    },
+    child: Text("$_count",
+        key: ValueKey<int>(_count),
+        style: Theme.of(context).textTheme.display1
+    )
+)
+``` 
