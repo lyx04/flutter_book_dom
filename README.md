@@ -211,4 +211,20 @@ AnimatedSwitcher({
   this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder, // 动画构建器
   this.layoutBuilder = AnimatedSwitcher.defaultLayoutBuilder, //布局构建器
 })
-```
+```  
+> 一个子元素新旧值之间的切换(AnimatedSwitcher)AnimatedSwitcher的新旧child，如果类型相同，则Key必须不相等()。  
+```dart
+AnimatedSwitcher(
+    duration: Duration(milliseconds: 5000),
+    transitionBuilder: (Widget child, Animation<double> animtion) {
+        return FadeTransition(
+        child:child,
+        opacity:animtion
+        );
+    },
+    child: Text("$_count",
+        key: ValueKey<int>(_count),
+        style: Theme.of(context).textTheme.display1
+    )
+)
+``` 
