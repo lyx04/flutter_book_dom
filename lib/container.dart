@@ -5,7 +5,7 @@ class ContainerBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-        ScaffoldBox();
+        // ScaffoldBox();
         ListView(
       children: <Widget>[
         PaddingBox(),
@@ -89,7 +89,7 @@ class DecoratBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Colors.red, Colors.orange[700]]),
+          gradient: LinearGradient(colors: [Colors.red, Colors.orange[100]]),
           boxShadow: [
             BoxShadow(
                 color: Colors.black54,

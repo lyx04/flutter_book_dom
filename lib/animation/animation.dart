@@ -46,13 +46,15 @@ class _ImgenlargeBoxState extends State<ImgenlargeBox>
         new CurvedAnimation(parent: _controller, curve: Curves.bounceIn);
     //注册一个动画的值
     _animation = new Tween(begin: 0.0, end: 200.0).animate(_controller);
-    _animation.addStatusListener((state){
-      if(state == AnimationStatus.completed){
-        _controller.reverse();
-      }else if(state == AnimationStatus.dismissed){
-        _controller.forward();
-      }
-    });
+    _animation.addStatusListener(
+      (state) {
+        if (state == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (state == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      },
+    );
     // ..addListener(() {//监控每一帧
     //   setState(() {});//会导致widgt的build方法重新调用
     // });==AnimationImg
