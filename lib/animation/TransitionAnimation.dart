@@ -19,6 +19,7 @@ class AnimatedDecoratedBox1 extends StatefulWidget {
 
 class _AnimatedDecoratedBox1State extends State<AnimatedDecoratedBox1>
     with SingleTickerProviderStateMixin {
+  Color _color = Colors.red;
   Animation<Color> _animation;
   AnimationController _animationController;
   @override
@@ -26,10 +27,20 @@ class _AnimatedDecoratedBox1State extends State<AnimatedDecoratedBox1>
     // TODO: implement initState
     super.initState();
     _animationController = AnimationController(
-        duration: Duration(seconds: 5), vsync: this);
+        duration: Duration(milliseconds: 5000), vsync: this);
     Animation curve = new CurvedAnimation(
         parent: _animationController, curve: Curves.fastLinearToSlowEaseIn);
     _animation = ColorTween(begin: Colors.red, end: Colors.blue).animate(curve);
+    _animation.addStatusListener((listener) {
+      print("-----------------------$listener");
+    });
+  }
+
+  @override
+  void didUpdateWidget(AnimatedDecoratedBox1 oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print("//////////////////////$oldWidget");
   }
 
   @override
@@ -38,20 +49,21 @@ class _AnimatedDecoratedBox1State extends State<AnimatedDecoratedBox1>
       animation: _animation,
       builder: (BuildContext context, Widget child) {
         return DecoratedBox(
-          decoration:BoxDecoration(color:_animation.value),
+          decoration: BoxDecoration(color: _animation.value),
           child: child,
         );
       },
-      child:FlatButton(
-          onPressed: () {
-            _animationController.forward();
-          },
-          child: Text("变色"),
-        ),
+      child: FlatButton(
+        onPressed: () {
+          _animationController.forward();
+        },
+        child: Text("变色"),
+      ),
     );
   }
 }
 
+//继承statefulWidget
 class AnimatedDecoratedBox2 extends StatefulWidget {
   AnimatedDecoratedBox2({
     Key key,
@@ -119,6 +131,9 @@ class _AnimatedDecoratedBox2State extends State<AnimatedDecoratedBox2>
       _controller.duration = widget.duration;
       _controller.reverseDuration = widget.reverseDuration;
     }
+    print(widget.decoration);
+    print(_tween.end);
+    print(_tween.begin);
     if (widget.decoration != (_tween.end ?? _tween.begin)) {
       _tween
         ..begin = _tween.evaluate(_animation)
@@ -157,10 +172,51 @@ class _CommonAState extends State<CommonA> {
         ),
         onPressed: () {
           setState(() {
-            _decorationColor = Colors.red;
+            // _decorationColor = Colors.red;
           });
         },
       ),
     );
+  }
+}
+
+//继承 ImplicitlyAnimatedWidget
+class AnimatedDecoratedBox3 extends ImplicitlyAnimatedWidget {
+  AnimatedDecoratedBox3({
+    Key key,
+    @required this.decoration,
+    this.child,
+    Curve curve = Curves.linear, //动画曲线
+    @required Duration duration, // 正向动画执行时长
+    Duration reverseDuration, // 反向动画执行时长
+  }) : super(
+          key: key,
+          curve: curve,
+          duration: duration,
+        );
+  final BoxDecoration decoration;
+  final Widget child;
+
+  @override
+  _AnimatedDecoratedBoxState createState() {
+    return _AnimatedDecoratedBoxState();
+  }
+}
+
+class _AnimatedDecoratedBoxState
+    extends AnimatedWidgetBaseState<AnimatedDecoratedBox3> {
+  DecorationTween _decoration;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+        decoration: _decoration.evaluate(animation), child: widget.child);
+  }
+
+  @override
+  void forEachTween(visitor) {
+    // 在需要更新Tween时，基类会调用此方法
+    _decoration = visitor(_decoration, widget.decoration,
+        (value) => DecorationTween(begin: value));
   }
 }
