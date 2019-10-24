@@ -73,6 +73,23 @@ FormField(
 ```
 ## 布局类
 UnconstrainedBox取消父的宽高限制  
+* RotatedBox  
+> 可以对子组件进行旋转，变化阶段在layout，会影响子组件的位置和大小
+* InkWell  
+> 在手指按下会有涟漪效果  
+* DecoratedBox  
+> 装饰容器  
+> decoration：代表将要绘制的装饰，它的类型为Decoration。Decoration是一个抽象类，它定义了一个接口 createBoxPainter()，子类的主要职责是需要通过实现它来创建一个画笔，该画笔用于绘制装饰。
+position：此属性决定在哪里绘制Decoration，它接收DecorationPosition的枚举类型，该枚举类有两个值：
+background：在子组件之后绘制，即背景装饰。
+foreground：在子组件之上绘制，即前景。  
+```dart
+const DecoratedBox({
+  Decoration decoration,
+  DecorationPosition position = DecorationPosition.background,
+  Widget child
+})
+```  
 * Flex  
 >使用direction:Axis.vertical纵向的需要一个确定的高度 例如使用container作为父容器  
 * Stack  
@@ -169,7 +186,7 @@ NotificationListener<ScrollEndNotification>(
     })
 ```  
 1. 假设NotificationListener嵌套，为了使子组件阻止冒泡,在onNotification中需要return true否则return false父组件NotificationListener的onNotification可以接收到通知  
-## 动画  
+## 动画 **需要重新学习尤其9.7**  
 * Animation保存动画状态和插值的  
 > Animation<double>/Animation<Color>/Animation<Size> 通过Animation对象的value属性获取动画的当前状态值 
 > addListener() 给Animation添加帧监听器，每一帧都会被调用/addStatusListener()  添加"动画状态改变"监听器,动画开始(forward)、结束(completed)、正向(forward)、反向(reverse)时会调用状态改变的监听器  
@@ -182,7 +199,8 @@ NotificationListener<ScrollEndNotification>(
 > AnimationController用于控制动画  
 ```dart
     final AnimationController controller = new AnimationController(duration:const Duration(milliseconds:2000),vsync:this)
-    final AnimationController controller = new AnimationController(duration:const Duration(milliseconds:2000),lowerBound:10.0,upperBoundL:20.0,vsync:this)
+    //lowerBound与upperBound是生成的区间 
+    final AnimationController controller = new AnimationController(duration:const Duration(milliseconds:2000),lowerBound:10.0,upperBound:20.0,vsync:this)
 ```  
 > 构建一个控制器  
 ```dart

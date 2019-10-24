@@ -49,13 +49,15 @@ class _AnimatedDecoratedBox1State extends State<AnimatedDecoratedBox1>
       animation: _animation,
       builder: (BuildContext context, Widget child) {
         return DecoratedBox(
-          decoration: BoxDecoration(color: _animation.value),
+          decoration: BoxDecoration(color: _color),
           child: child,
         );
       },
       child: FlatButton(
         onPressed: () {
-          _animationController.forward();
+          setState(() {
+            _color = Colors.blue;
+          });
         },
         child: Text("变色"),
       ),
@@ -131,9 +133,6 @@ class _AnimatedDecoratedBox2State extends State<AnimatedDecoratedBox2>
       _controller.duration = widget.duration;
       _controller.reverseDuration = widget.reverseDuration;
     }
-    print(widget.decoration);
-    print(_tween.end);
-    print(_tween.begin);
     if (widget.decoration != (_tween.end ?? _tween.begin)) {
       _tween
         ..begin = _tween.evaluate(_animation)

@@ -10,13 +10,14 @@ import "animation/animation.dart";
 import "animation/pageAnimation.dart";
 import "animation/CommonAnimation.dart";
 import "animation/TransitionAnimation.dart";
+import "customWidget/customIndex.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: TransitionAnimation()));
+    return MaterialApp(home: Scaffold(body: CustomButton()));
   }
 }
 
