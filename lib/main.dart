@@ -11,13 +11,14 @@ import "animation/pageAnimation.dart";
 import "animation/CommonAnimation.dart";
 import "animation/TransitionAnimation.dart";
 import "customWidget/customIndex.dart";
+import "IO/iocounter.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: CustomButton()));
+    return MaterialApp(home: Scaffold(body: IoCounter()));
   }
 }
 

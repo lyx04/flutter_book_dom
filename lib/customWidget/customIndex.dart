@@ -6,7 +6,7 @@ class CustomButton extends StatelessWidget {
     return Scrollbar(
       child: SingleChildScrollView(
         child: Column(
-          children: <Widget>[TurnBoxRoute()],
+          children: <Widget>[TransitionWidget(), MyText()],
         ),
       ),
     );
@@ -88,7 +88,7 @@ class _CostomWidgetState extends State<CostomWidget>
       lowerBound: -double.infinity,
       upperBound: double.infinity,
     );
-    // _controller.value = widget.turns;
+    _controller.value = widget.turns;
   }
 
   @override
@@ -125,77 +125,101 @@ class TransitionWidget extends StatefulWidget {
   _TransitionWidgetState createState() => _TransitionWidgetState();
 }
 
-class _TransitionWidgetState extends State<TransitionWidget> {
-  double _truns = .0;
+class _TransitionWidgetState extends State<TransitionWidget>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  double _trues = 0.0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(
+      lowerBound: -double.infinity,
+      upperBound: double.infinity,
+      vsync: this,
+    );
+    _controller.value = _trues;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _truns += 0.2;
-        });
-      },
-      child: CostomWidget(
-        turns: _truns,
+      child: RotationTransition(
+        turns: _controller,
         child: Container(
           width: 100.0,
           height: 100.0,
-          decoration: BoxDecoration(color: Colors.red),
-          child: Text(
-            "旋转",
-            style: TextStyle(color: Colors.blue),
-          ),
+          color: Colors.red,
         ),
       ),
+      onTap: () {
+        setState(() {
+          _trues += 0.2;
+        });
+        _controller.animateTo(
+          _trues,
+          duration: Duration(milliseconds: 500),
+        );
+      },
     );
   }
 }
 
-class TurnBoxRoute extends StatefulWidget {
+class MyRichText extends StatefulWidget {
+  MyRichText({
+    Key key,
+    this.text,
+    this.linkStyle,
+  }) : super(key: key);
+
+  final String text;
+  final TextStyle linkStyle;
   @override
-  _TurnBoxRouteState createState() => new _TurnBoxRouteState();
+  _MyRichTextState createState() => _MyRichTextState();
 }
 
-class _TurnBoxRouteState extends State<TurnBoxRoute> {
-  double _turns = .0;
-
+class _MyRichTextState extends State<MyRichText> {
+  TextSpan _textSpan;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          CostomWidget(
-            turns: _turns,
-            child: Icon(
-              Icons.refresh,
-              size: 50,
-            ),
-          ),
-          CostomWidget(
-            turns: _turns,
-            child: Icon(
-              Icons.refresh,
-              size: 150.0,
-            ),
-          ),
-          RaisedButton(
-            child: Text("顺时针旋转1/5圈"),
-            onPressed: () {
-              setState(() {
-                _turns += .2;
-              });
-            },
-          ),
-          RaisedButton(
-            child: Text("逆时针旋转1/5圈"),
-            onPressed: () {
-              setState(() {
-                _turns -= .2;
-              });
-            },
-          )
-        ],
-      ),
+    return RichText(text: _textSpan);
+  }
+
+  TextSpan parseText(String text) {
+    return TextSpan(
+      text: text,
+      style: widget.linkStyle
     );
+    // return
+  }
+
+  @override
+  void didUpdateWidget(MyRichText oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (widget.text != oldWidget.text) {
+      _textSpan = parseText(widget.text);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _textSpan = parseText(widget.text);
+  }
+}
+
+class MyText extends StatefulWidget {
+  @override
+  _MyTextState createState() => _MyTextState();
+}
+
+class _MyTextState extends State<MyText> {
+  @override
+  Widget build(BuildContext context) {
+    String _text =
+        "fdslkfjsdklfjsdklfjsdklfjsdkl2fjsdlkfsdfsdf/https://www.baidu.com";
+    return MyRichText(text: _text, linkStyle: TextStyle(color: Colors.black));
   }
 }

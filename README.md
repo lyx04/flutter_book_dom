@@ -1,6 +1,6 @@
 # flutter_book_dom
-flutter实战书
-## 修改国内镜像
+flutter实战书10.4/5暂且跳过  
+## 修改国内镜像  
 将Google()、jcenter()修改成  
 maven { url 'https://maven.aliyun.com/repository/google' }  
 maven { url 'https://maven.aliyun.com/repository/jcenter' }  
@@ -245,4 +245,9 @@ AnimatedSwitcher(
         style: Theme.of(context).textTheme.display1
     )
 )
-``` 
+```  
+* IO  
+>App目录(PathProvider提供访问设备文件)  
+1. 使用getTemporaryDirectory()获取苹果NSTemporaryDirectory()/android(getCacheDir())的**临时目录**  
+2. 使用getApplicationDocumentsDirectory()获取苹果NSDocumentDirectory/android(AppData)的**文档目录**  
+3. 使用getExternalStorageDirectory()活动android使用getExternalStorageDirectory/苹果会抛出UnsupportedError异常**外部存储目录**  
