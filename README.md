@@ -247,7 +247,28 @@ AnimatedSwitcher(
 )
 ```  
 * IO  
->App目录(PathProvider提供访问设备文件)  
+>App目录(PathProvider提供访问设备文件)Dart io的库操作文件的api非常丰富  
 1. 使用getTemporaryDirectory()获取苹果NSTemporaryDirectory()/android(getCacheDir())的**临时目录**  
 2. 使用getApplicationDocumentsDirectory()获取苹果NSDocumentDirectory/android(AppData)的**文档目录**  
 3. 使用getExternalStorageDirectory()活动android使用getExternalStorageDirectory/苹果会抛出UnsupportedError异常**外部存储目录**  
+* 发送http请求  
+1. 创建一个HttpClient(HttpClient httpClient = new HttpClient();)  
+2. 打开http连接，设置请求头  
+```dart
+    HttpClientRequest request = await httpClient.getUrl(uri)/httpClient.post()/httpClient.delete;
+    Uri uri = Uri(scheme:"https",host:"",queryParameters:{xx:xx,yy:yy});
+    request.headers.add("user-agent","test")//设置请求header
+    ////////////////////////////////////////////////////////////////////////////
+    //如果是post或者put方法可以
+    String payload = ""
+    request.add(utf8.encode(payload));
+```  
+3. 等待链接服务器  
+```dart
+    HttpClientResponse response = await request.cloes();
+```  
+4. 读取响应内容(通过读取响应流来获取服务器返回的数据，读取时可以设置编码格式)  
+```dart
+    responseBody = await response.transform(utf8.decoder).join();
+```  
+5. 关闭请求(httpclient.close())  
