@@ -37,11 +37,13 @@ class _HttpclientRouteState extends State<HttpclientRoute> {
                       try {
                         // _httpClient.connectionTimeout = Duration( minutes: 2);
                         HttpClientRequest request = await _httpClient
-                            .getUrl(Uri.parse("https://www.baidu.com"));
-                        // .getUrl(Uri.parse("https://news-at.zhihu.com/api/4/news/latest"));
+                            // .getUrl(Uri.parse("https://www.baidu.com"));
+                            .getUrl(
+                          Uri.parse(
+                              "https://news-at.zhihu.com/api/4/news/latest"),
+                        );
                         HttpClientResponse response = await request.close();
                         txt = await response.transform(utf8.decoder).join();
-                        print(response.headers);
                         request.close();
                       } catch (e) {
                         print(e);
@@ -61,17 +63,17 @@ class _HttpclientRouteState extends State<HttpclientRoute> {
                       try {
                         _httpClient.addCredentials(
                           Uri.parse(
-                              "https://svn.hseduyun.net/svn/message_center/message_center/trunk"),
+                              "https://svn.hseduyun.net/svn/program/header"),
                           "admin",
                           HttpClientBasicCredentials(
                               "liangyuxuan", "liangyuxuan0320"),
                         );
                         HttpClientRequest request = await _httpClient.getUrl(
                           Uri.parse(
-                              "https://svn.hseduyun.net/svn/message_center/message_center/trunk"),
+                              "https://svn.hseduyun.net/svn/program/header"),
                         );
                         HttpClientResponse response = await request.close();
-                        print(await response.transform(utf8.decoder).join());
+                        print(response);
                         request.close();
                       } catch (e) {
                         print("请求失败$e");
