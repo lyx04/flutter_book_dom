@@ -30,38 +30,62 @@ class _DioHttpClientState extends State<DioHttpClient> {
               },
             ),
             button(
-                text: "GET使用query参数对象传递",
+              text: "GET使用query参数对象传递",
+              callback: () async {
+                // Response response = await dio.get(
+                //     "https://saas2-portal.hseduyun.net/api/getWebSiteInfo",
+                //     queryParameters: {
+                //       "tenantId": 002,
+                //       "organizationId": 541
+                //     });
+                HttpClient httpClient = new HttpClient();
+                try {
+                  HttpClientRequest request = await httpClient.getUrl(
+                    Uri(
+                      scheme: "https",
+                      host: "saas2-portal.hseduyun.net",
+                      path: "/api/getWebSiteInfo",
+                      queryParameters: {
+                        "tenantId": "002",
+                        "organizationId": "541"
+                      },
+                    ),
+                  );
+                  HttpClientResponse response = await request.close();
+                  print(request.uri);
+                  var res = await response.transform(utf8.decoder).join();
+                  setState(() {
+                    _res = res;
+                  });
+                } catch (e) {
+                  print("请求失败$e");
+                } finally {
+                  httpClient.close();
+                }
+              },
+            ),
+            button(
+                text: "dioPost请求",
                 callback: () async {
-                  // Response response = await dio.get(
-                  //     "https://saas2-portal.hseduyun.net/api/getWebSiteInfo",
-                  //     queryParameters: {
-                  //       "tenantId": 002,
-                  //       "organizationId": 541
-                  //     });
+                  Response response = await dio.post(
+                      "https://newedu.yceduyun.com/newEditionHome/getInfoByDomain");
+                  setState(() {
+                    _res = response.data.toString();
+                  });
+                }),
+            button(
+                text: "自己写的post请求",
+                callback: () async {
                   HttpClient httpClient = new HttpClient();
-                  try {
-                    HttpClientRequest request = await httpClient.getUrl(
-                      Uri(
-                        scheme: "https",
-                        host: "saas2-portal.hseduyun.net",
-                        path: "/api/getWebSiteInfo",
-                        queryParameters: {
-                          "tenantId": "002",
-                          "organizationId": "541"
-                        },
-                      ),
-                    );
-                    HttpClientResponse response = await request.close();
-                    print(request.uri);
-                     var res = await response.transform(utf8.decoder).join();
-                    setState(() {
-                      _res = res;
-                    });
-                  } catch (e) {
-                    print("请求失败$e");
-                  } finally {
-                    httpClient.close();
-                  }
+                  HttpClientRequest request = await httpClient.postUrl(
+                    Uri.parse(
+                        "https://newedu.yceduyun.com/newEditionHome/getInfoByDomain"),
+                  );
+                  HttpClientResponse response = await request.close();
+                  var text = await response.transform(utf8.decoder).join();
+                  setState(() {
+                    _res = text;
+                  });
                 }),
             Text("$_res")
           ],
