@@ -74,19 +74,26 @@ class _DioHttpClientState extends State<DioHttpClient> {
                   });
                 }),
             button(
-                text: "自己写的post请求",
-                callback: () async {
-                  HttpClient httpClient = new HttpClient();
-                  HttpClientRequest request = await httpClient.postUrl(
-                    Uri.parse(
-                        "https://newedu.yceduyun.com/newEditionHome/getInfoByDomain"),
-                  );
-                  HttpClientResponse response = await request.close();
-                  var text = await response.transform(utf8.decoder).join();
-                  setState(() {
-                    _res = text;
-                  });
-                }),
+              text: "自己写的post请求",
+              callback: () async {
+                HttpClient httpClient = new HttpClient();
+                HttpClientRequest request = await httpClient.postUrl(
+                  Uri.parse(
+                      "https://newedu.yceduyun.com/newEditionHome/getInfoByDomain"),
+                );
+                HttpClientResponse response = await request.close();
+                var text = await response.transform(utf8.decoder).join();
+                setState(() {
+                  _res = text;
+                });
+              },
+            ),
+            button(
+              text: "下载文件",
+              callback: () async{
+                Response response = await dio.download('https://p.ssl.qhimg.com/',"dmfd/130_100_100/t017eebc3f8719d3002.jpg?size=640x331");
+              }
+            ),
             Text("$_res")
           ],
         ),
