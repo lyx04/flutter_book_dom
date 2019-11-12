@@ -3,6 +3,7 @@ import 'dart:io';
 
 import "package:flutter/material.dart";
 import "package:dio/dio.dart";
+import 'package:path_provider/path_provider.dart';
 
 Dio dio = Dio();
 
@@ -89,11 +90,12 @@ class _DioHttpClientState extends State<DioHttpClient> {
               },
             ),
             button(
-              text: "下载文件",
-              callback: () async{
-                Response response = await dio.download('https://p.ssl.qhimg.com/',"dmfd/130_100_100/t017eebc3f8719d3002.jpg?size=640x331");
-              }
-            ),
+                text: "下载文件",
+                callback: () async {
+                  print((await getApplicationDocumentsDirectory()).path);
+                  // Response response = await dio.download(
+                  //     "https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/pkg/EasyRefresh.apk",);
+                }),
             Text("$_res")
           ],
         ),
