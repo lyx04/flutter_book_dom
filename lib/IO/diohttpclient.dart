@@ -92,9 +92,10 @@ class _DioHttpClientState extends State<DioHttpClient> {
             button(
                 text: "下载文件",
                 callback: () async {
-                  print((await getApplicationDocumentsDirectory()).path);
-                  // Response response = await dio.download(
-                  //     "https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/pkg/EasyRefresh.apk",);
+                  var path = (await getApplicationDocumentsDirectory()).path;
+                  Response response = await dio.download(
+                      "https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/pkg/EasyRefresh.apk",
+                      new File('$path'));
                 }),
             Text("$_res")
           ],
