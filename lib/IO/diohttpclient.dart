@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import "package:flutter/material.dart";
 import "package:dio/dio.dart";
 import 'package:path_provider/path_provider.dart';
@@ -90,12 +89,30 @@ class _DioHttpClientState extends State<DioHttpClient> {
               },
             ),
             button(
-                text: "下载文件",
+                text: "下载文件(有问题)",
                 callback: () async {
-                  var path = (await getApplicationDocumentsDirectory()).path;
-                  Response response = await dio.download(
-                      "https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/pkg/EasyRefresh.apk",
-                      new File('$path'));
+                  String file = (await getApplicationDocumentsDirectory()).path;
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("$file"),
+                    ),
+                  );
+
+                  new Directory('dir/subdir').create(recursive: true)
+                      // The created directory is returned as a Future.
+                      .then((Directory directory) {
+                    print(directory.path);
+                  });
+                  // Response response = await dio.download(
+                  //     "http://m.ityyedu.com/grain/testItem/exportWordTestItem?sampleId=165&sessionid=27f02246-d774-49e9-a208-6fbe4f3567b7",
+                  //     file);
+                  //     print(response);
+                }),
+            button(
+                text: "发送FormData",
+                callback: () async {
+                  FormData formData =
+                      new FormData.fromMap({"name": "wendux", "age": 25});
                 }),
             Text("$_res")
           ],

@@ -250,7 +250,7 @@ AnimatedSwitcher(
 >App目录(PathProvider提供访问设备文件)Dart io的库操作文件的api非常丰富  
 1. 使用getTemporaryDirectory()获取苹果NSTemporaryDirectory()/android(getCacheDir())的**临时目录**  
 2. 使用getApplicationDocumentsDirectory()获取苹果NSDocumentDirectory/android(AppData)的**文档目录**  
-3. 使用getExternalStorageDirectory()活动android使用getExternalStorageDirectory/苹果会抛出UnsupportedError异常**外部存储目录**  
+3. 使用getExternalStorageDirectory()获取android使用getExternalStorageDirectory/苹果会抛出UnsupportedError异常**外部存储目录**  
 * 发送http请求  
 1. 创建一个HttpClient(HttpClient httpClient = new HttpClient();)  
 2. 打开http连接，设置请求头  

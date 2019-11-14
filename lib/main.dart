@@ -14,13 +14,15 @@ import "customWidget/customIndex.dart";
 import "IO/iocounter.dart";
 import 'IO/httpclient.dart';
 import "IO/diohttpclient.dart";
+import "IO/githubDio.dart";
+import "IO/websockets.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: DioHttpClient()));
+    return MaterialApp(home: Scaffold(body: WebSockets()));
   }
 }
 
