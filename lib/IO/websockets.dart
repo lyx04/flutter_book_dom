@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import "package:flutter/material.dart";
 import "package:web_socket_channel/io.dart";
 
@@ -50,6 +52,10 @@ class _WebSocketsState extends State<WebSockets> {
         RaisedButton(
           onPressed: sendMessage,
           child: Text("发送请求"),
+        ),
+        RaisedButton(
+          onPressed: sendSocket,
+          child:Text("Socket请求")
         )
       ],
     );
@@ -58,5 +64,17 @@ class _WebSocketsState extends State<WebSockets> {
     if(textController.text.isNotEmpty){
       channel.sink.add(textController.text);
     }
+  }
+  void sendSocket() async{
+    var socket = await Socket.connect("baidu.com",80);
+    socket.writeln("GET / HTTP、1.1");
+    socket.writeln("Host:baidu.com");
+    socket.writeln("Connention:close");
+    socket.writeln();
+    await socket.flush();//发送
+    print(socket);
+    await socket.close();
+    // String text = await socket.transform(utf8.decoder).join();
+
   }
 }

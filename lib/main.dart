@@ -16,13 +16,14 @@ import 'IO/httpclient.dart';
 import "IO/diohttpclient.dart";
 import "IO/githubDio.dart";
 import "IO/websockets.dart";
+import "IO/JsonMap.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: WebSockets()));
+    return MaterialApp(home: Scaffold(body: JsonandMap()));
   }
 }
 
