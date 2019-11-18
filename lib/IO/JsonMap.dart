@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import "package:flutter/material.dart";
+import "../model/user.dart";
 
 class JsonandMap extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _JsonandMapState extends State<JsonandMap> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     items = json.decode(jsonStr);
-    var user = new User.fromJson(items[0]);
+    var user = User.fromJson(items[0]);
     print(user);
   }
 
@@ -32,16 +33,4 @@ class _JsonandMapState extends State<JsonandMap> {
       child: Text("安排"),
     );
   }
-}
-
-class User {
-  final String name;
-  final String email;
-  User(this.email, this.name);
-
-  User.fromJson(Map<String, dynamic> json)
-      : name = json["name"],
-        email = json["email"];
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{"name": name, "email": email};
 }

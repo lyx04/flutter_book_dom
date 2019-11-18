@@ -272,3 +272,7 @@ AnimatedSwitcher(
     responseBody = await response.transform(utf8.decoder).join();
 ```  
 5. 关闭请求(httpclient.close())  
+* JSON-Model(11.7)  
+* Element与widget的关系  
+1. Flutter的树是一个个独立的Element节点构成，组件最终的Layout、**渲染是通过RenderObject完成，根据Widget生成Element、创建响应的RenderObject并关联到Element.renderObject属性上，最后通过RenderObject完成布局排列**  
+2. flutter UI系统包含三棵树、**Widget树、element树、渲染树** 依赖关系为element树根据Widget树生成、渲染树依赖于element树
