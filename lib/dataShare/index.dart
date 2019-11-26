@@ -70,6 +70,7 @@ class ShopInheritedWidget extends InheritedWidget {
   final List list;
   @override
   bool updateShouldNotify(ShopInheritedWidget oldWidget) {
+    print("111111111111111111111111111");
     print(list);
     return true;
   }
@@ -170,8 +171,9 @@ class _ShopCardState extends State<ShopCard> {
           children: <Widget>[
             Builder(
               builder: (BuildContext context1) {
-                print(context1);
                 print("--------------------------------------------");
+                
+                print(context1);
                 print(ShopInheritedWidget.of(context1).list);
                 return Text("fsd");
                 // return Expanded(
