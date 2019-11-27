@@ -123,6 +123,9 @@ const DecoratedBox({
 >InheritedWidget中of方法中context的方法  
 >1. context.inheritFromWidgetOfExactType(ShareDataWidget);调用的时候会触发子组件的didChangeDependencies的方法    
 >2. context.ancestorInheritedElementForWidgetOfExactType(Widget).widget;不会触发子组件的didChangeDependencies的方法  
+* provider的发布者-订阅者  
+>1. ChangeNotifier继承Listenable  
+>> addListener/removeListener添加或者删除监听器(订阅者),通过调用notifyListeners()触发所有监听器回调  
 * Color  
 > color.computeLuminance**获取颜色0-1的值颜色越大颜色越浅**  
 * Dialog(弹框)  

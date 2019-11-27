@@ -10,7 +10,7 @@ class DataShare extends InheritedWidget {
   static DataShare of(BuildContext context) {
     print(context);
     // 定义一个便捷方法，方便子树中的Widget获取共享数据
-    return context.inheritFromWidgetOfExactType(DataShare);
+    return context.ancestorInheritedElementForWidgetOfExactType(DataShare).widget;
   }
 
   //该回调决定当data发生变化时，是否通知子树中依赖data的Widget
@@ -40,6 +40,7 @@ class _Test1WidgetState extends State<Test1Widget> {
 
   @override
   Widget build(BuildContext context) {
+    print(1);
     return DataShare(
       data: count,
       child: Column(
@@ -70,13 +71,12 @@ class ShopInheritedWidget extends InheritedWidget {
   final List list;
   @override
   bool updateShouldNotify(ShopInheritedWidget oldWidget) {
-    print("111111111111111111111111111");
     print(list);
     return true;
   }
 
   static ShopInheritedWidget of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(ShopInheritedWidget);
+    return context.ancestorInheritedElementForWidgetOfExactType(ShopInheritedWidget).widget;
   }
 }
 
@@ -128,7 +128,9 @@ class _ShopListState extends State<ShopList> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return ShopCard();
+                    return ShopCard(
+                      listcard: shoplist,
+                    );
                   },
                 ),
               );
@@ -155,6 +157,9 @@ class _ShopListState extends State<ShopList> {
 }
 
 class ShopCard extends StatefulWidget {
+  ShopCard({Key key, this.listcard}) : super(key: key);
+
+  final List listcard;
   @override
   _ShopCardState createState() => _ShopCardState();
 }
@@ -167,36 +172,32 @@ class _ShopCardState extends State<ShopCard> {
         title: Text("购物车详情"),
       ),
       body: ShopInheritedWidget(
+        list: widget.listcard,
         child: Column(
           children: <Widget>[
             Builder(
               builder: (BuildContext context1) {
-                print("--------------------------------------------");
-                
-                print(context1);
-                print(ShopInheritedWidget.of(context1).list);
-                return Text("fsd");
-                // return Expanded(
-                //   child: ListView(
-                //     children: ShopInheritedWidget.of(context1).list.map((e) {
-                //       var name = e['name'];
-                //       return ListTile(
-                //         title: Text("$name"),
-                //       );
-                //     }).toList(),
-                //   ),
-                // );
+                return Expanded(
+                  child: ListView(
+                    children: ShopInheritedWidget.of(context1).list.map((e) {
+                      var name = e['name'];
+                      return ListTile(
+                        title: Text("$name"),
+                      );
+                    }).toList(),
+                  ),
+                );
               },
             ),
-            // Builder(
-            //   builder: (BuildContext context) {
-            //     var money = 0;
-            //     ShopInheritedWidget.of(context).list.forEach((e) {
-            //       money += int.parse(e["money"]);
-            //     });
-            //     return Expanded(child: Text("$money"));
-            //   },
-            // )
+            Builder(
+              builder: (BuildContext context) {
+                var money = 0;
+                ShopInheritedWidget.of(context).list.forEach((e) {
+                  money += int.parse(e["money"]);
+                });
+                return Expanded(child: Text("$money"));
+              },
+            )
           ],
         ),
       ),
