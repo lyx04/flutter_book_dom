@@ -18,13 +18,14 @@ import "IO/githubDio.dart";
 import "IO/websockets.dart";
 import "IO/JsonMap.dart";
 import "dataShare/index.dart";
+import "dataShare/provider.dart";
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: Test1Widget()));
+    return MaterialApp(home: Scaffold(body: ProviderShop()));
   }
 }
 
